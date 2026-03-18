@@ -1,0 +1,14 @@
+#ifndef INTRO_SCENE_H_
+#define INTRO_SCENE_H_
+
+#include "engine/scene.h"
+#include "engine/Components/SpriteRenderer.h"
+#include "engine/Components/Rigidbody.h"
+#include "engine/Components/Tilemap.h"
+#include "engine/Components/Animator.h"
+#include "engine/Components/BoxCollider.h"
+#include "engine/Components/Font.h"
+
+void GenerateIntroScene(const std::unique_ptr<Scene>& gameScene);
+
+#endif
