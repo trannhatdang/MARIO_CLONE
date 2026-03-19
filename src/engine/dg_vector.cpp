@@ -216,6 +216,16 @@ int Vector3_Dot(const Vector3& lhs, const Vector3& rhs)
 	return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;
 }
 
+Vector3 Vector3_GetUnitVector(const Vector3& vec)
+{
+	int mag = vec.magnitude();
+	int x = vec.x / mag;
+	int y = vec.y / mag;
+	int z = vec.z / mag;
+
+	return { x, y, z };
+}
+
 Vector3f Vector3f_Zero()
 {
 	return {0, 0, 0};

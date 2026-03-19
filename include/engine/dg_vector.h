@@ -59,6 +59,7 @@ Vector3f operator*(float lhs, const Vector3f& rhs);
 Vector3 Vector3_Zero();
 Vector3 Vector3_One();
 int Vector3_Dot(const Vector3& lhs, const Vector3& rhs);
+Vector3 Vector3_GetUnitVector(const Vector3& vec);
 Vector3f Vector3f_Zero();
 Vector3f Vector3f_Left();
 Vector3f Vector3f_Right();

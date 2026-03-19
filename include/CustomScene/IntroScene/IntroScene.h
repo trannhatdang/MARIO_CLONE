@@ -8,7 +8,6 @@
 #include "engine/Components/Animator.h"
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
-#include "engine/Components/VideoPlayer.h"
 #include "Config.h"
 
 void GenerateIntroScene(const std::unique_ptr<Scene>& gameScene);

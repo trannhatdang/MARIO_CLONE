@@ -30,7 +30,6 @@ class Scene
 		SDL_Window* GetWindow() const;
 		const std::vector<BoxCollider*>& GetColliders() const;
 
-
 		void DEBUG_PrintGameObjAdd() const;
 };
 

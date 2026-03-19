@@ -70,7 +70,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 	GenerateMenuScene(scenes[1]);
 	GenerateGameScene(scenes[2]);
 
-	ChangeScene(0);
+	ChangeScene(1);
 
 	currScene->OnStart();
 

@@ -23,7 +23,6 @@ void SpriteRenderer::OnIterate()
 
 void SpriteRenderer::OnDraw(SDL_Renderer* renderer)
 {
-	//i'm not managing that!
 	Vector3 pos = static_cast<Transform*>(this->gameObject->GetTransform())->GetPosition();
 	SDL_Rect viewport;
 	//god what would happen if we go 3d?
