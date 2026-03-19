@@ -3,9 +3,11 @@
 const int WINDOW_WIDTH = 1120;
 const int WINDOW_HEIGHT = 800;
 const std::string BK_FILEPATH = ".\\data\\sprites\\01_logobachkhoasang.png";
-const std::string BK_SPRITESHEET_PATH = ".\\data\\sprites\\bachkhoaanim.png";
-const std::string BK_LOGO_INTRO_VIDEO = ".\\data\\media\\ratintro.mp4";
+const std::string BK_SPRITESHEET_FILEPATH = ".\\data\\sprites\\bachkhoaanim.png";
+const std::string BK_LOGO_INTRO_VIDEO_FILEPATH = ".\\data\\media\\ratintro.mp4";
 const std::string BACKGROUND_FILEPATH = ".\\data\\sprites\\background.png";
+const std::string BUTTON_FRAME_FILEPATH = ".\\data\\sprites\\buttonframe.png";
+const std::string PANEL_FILEPATH = ".\\data\\sprites\\panel.png";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\megaman-top.png";
 const std::string PLAYER_TOP_RIGHT_FILEPATH = ".\\data\\sprites\\megaman-top-right.png";
 const std::string PLAYER_TOP_DOWN_FILEPATH = ".\\data\\sprites\\megaman-top-down.png";
@@ -37,17 +39,27 @@ std::string GetBKLogo()
 
 std::string GetBKLogoSpriteSheet()
 {
-	return BK_SPRITESHEET_PATH;
+	return BK_SPRITESHEET_FILEPATH;
 }
 
 std::string GetBKLogoIntroVideo()
 {
-	return BK_LOGO_INTRO_VIDEO;
+	return BK_LOGO_INTRO_VIDEO_FILEPATH;
 }
 
 std::string GetBackgroundSprite()
 {
 	return BACKGROUND_FILEPATH;
+}
+
+std::string GetButtonFrameSprite()
+{
+	return BUTTON_FRAME_FILEPATH;
+}
+
+std::string GetPanelSprite()
+{
+	return PANEL_FILEPATH;
 }
 
 std::string GetPlayerTopdownSprite(int index)

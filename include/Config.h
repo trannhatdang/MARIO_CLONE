@@ -9,6 +9,8 @@ std::string GetBKLogo();
 std::string GetBKLogoSpriteSheet();
 std::string GetBKLogoIntroVideo();
 std::string GetBackgroundSprite();
+std::string GetButtonFrameSprite();
+std::string GetPanelSprite();
 std::string GetPlayerTopdownSprite(int index);
 std::string GetPlayerTwoTopdownSprite(int index);
 std::string GetPlayerSpriteSheet();

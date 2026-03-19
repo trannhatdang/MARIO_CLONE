@@ -8,6 +8,7 @@
 #include "engine/Components/Animator.h"
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
+#include "engine/Components/UI/Button.h"
 #include "SlowMovingBackground.h"
 #include "Config.h"
 

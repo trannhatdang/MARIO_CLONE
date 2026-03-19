@@ -25,3 +25,8 @@ void DrawTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport
 	SDL_RenderTexture(renderer, texture, &srcrect, &dstrect);
 	SDL_SetRenderViewport(renderer, NULL);
 }
+
+bool IsPointInsideRect(Vector3 vec, SDL_FRect rect)
+{
+	return vec.x >= rect.x && vec.y >= rect.y && vec.x <= (rect.x + rect.w) && vec.y <= (rect.y + rect.h);
+}
