@@ -38,7 +38,7 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 
 	auto startGamePanel = gameScene->AddGameObject("StartGamePanel", "Panel");
 	startGamePanel->AddComponent(new SpriteRenderer(startGamePanel, renderer, GetPanelSprite(), panel_srcrect, panel_dstrect));
-	auto growBigComp = startGamePanel->AddComponent(new GrowBig());
+	auto growBigComp = startGamePanel->AddComponent(new GrowBig(startGamePanel));
 
 	SDL_FRect startbutton_srcrect;
 	startbutton_srcrect.x = 0;
