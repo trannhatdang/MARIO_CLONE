@@ -5,6 +5,9 @@
 
 int GetWindowWidth();
 int GetWindowHeight();
+std::string GetBKLogo();
+std::string GetBKLogoSpriteSheet();
+std::string GetBKLogoIntroVideo();
 std::string GetPlayerTopdownSprite(int index);
 std::string GetPlayerTwoTopdownSprite(int index);
 std::string GetPlayerSpriteSheet();

@@ -2,6 +2,9 @@
 
 const int WINDOW_WIDTH = 1120;
 const int WINDOW_HEIGHT = 800;
+const std::string BK_FILEPATH = ".\\data\\sprites\\01_logobachkhoasang.png";
+const std::string BK_SPRITESHEET_PATH = ".\\data\\sprites\\bachkhoaanim.png";
+const std::string BK_LOGO_INTRO_VIDEO = ".\\data\\media\\ratintro.mp4";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\megaman-top.png";
 const std::string PLAYER_TOP_RIGHT_FILEPATH = ".\\data\\sprites\\megaman-top-right.png";
 const std::string PLAYER_TOP_DOWN_FILEPATH = ".\\data\\sprites\\megaman-top-down.png";
@@ -24,6 +27,21 @@ int GetWindowWidth(){
 
 int GetWindowHeight(){
 	return WINDOW_HEIGHT;
+}
+
+std::string GetBKLogo()
+{
+	return BK_FILEPATH;
+}
+
+std::string GetBKLogoSpriteSheet()
+{
+	return BK_SPRITESHEET_PATH;
+}
+
+std::string GetBKLogoIntroVideo()
+{
+	return BK_LOGO_INTRO_VIDEO;
 }
 
 std::string GetPlayerTopdownSprite(int index)

@@ -3,5 +3,7 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="MARIO_CLONE.vcxproj" />
+  <Project Path="C:/SDL/VisualC/SDL/SDL.vcxproj" Id="81ce8daf-ebb2-4761-8e45-b71abcca8c68" />
+  <Project Path="C:/SDL_ttf/VisualC/SDL_ttf.vcxproj" Id="dddbd07d-dc76-4af6-8d02-3e2deb6ee255" />
+  <Project Path="MARIO_CLONE.vcxproj" Id="8a266e7d-75a3-45dd-b36a-e78d8209e9f5" />
 </Solution>
