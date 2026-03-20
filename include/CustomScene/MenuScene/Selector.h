@@ -4,6 +4,7 @@
 #include "engine/Components/Component.h"
 #include "engine/Components/Transform.h"
 #include "engine/Components/UI/Button.h"
+#include "engine/Components/SpriteRenderer.h"
 
 class Selector : public Component
 {
@@ -11,6 +12,7 @@ class Selector : public Component
 		std::vector<GameObject*> m_objs;
 
 		Transform* m_tfs;
+		SpriteRenderer* m_spr;
 	public:
 		Selector(GameObject* obj, std::vector<GameObject*> objs);
 		~Selector();

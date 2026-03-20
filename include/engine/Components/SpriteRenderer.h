@@ -27,6 +27,7 @@ class SpriteRenderer : public Component
 
 		SDL_FRect GetDstRect() const;
 		void SetDstRect(SDL_FRect dstrect);
+		SDL_Rect GetViewport() const;
 };
 
 #endif

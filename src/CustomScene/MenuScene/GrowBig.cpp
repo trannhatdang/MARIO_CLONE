@@ -37,10 +37,12 @@ void GrowBig::OnIterate()
 	if(m_isBig && m_currScale < 100)
 	{
 		m_spr->SetDstRect(MultRect(m_onRect, ++m_currScale / 100.0f));
+		return;
 	}
 	else if(!m_isBig && m_currScale > 0)
 	{
 		m_spr->SetDstRect(MultRect(m_onRect, --m_currScale / 100.0f));
+		return;
 	}
 
 	if(!m_callBackFunc)
@@ -51,7 +53,7 @@ void GrowBig::OnIterate()
 	if((m_isBig && m_currScale == 100)
 		|| (!m_isBig && m_currScale == 0))
 	{
-		m_callBackFunc();
+		(*m_callBackFunc)();
 	}
 
 	m_callBackFunc = nullptr;

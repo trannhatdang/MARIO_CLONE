@@ -49,3 +49,13 @@ std::string Component::GetName() const
 {
 	return m_name;
 }
+
+void Component::SetActive(bool val)
+{
+	m_enabled = val;
+}
+
+bool Component::GetActive() const
+{
+	return m_enabled;
+}

@@ -31,6 +31,11 @@ bool IsPointInsideRect(const Vector3& vec, const SDL_FRect& rect)
 	return vec.x >= rect.x && vec.y >= rect.y && vec.x <= (rect.x + rect.w) && vec.y <= (rect.y + rect.h);
 }
 
+bool IsPointInsideRect(const Vector3& vec, const SDL_Rect& rect)
+{
+	return vec.x >= rect.x && vec.y >= rect.y && vec.x <= (rect.x + rect.w) && vec.y <= (rect.y + rect.h);
+}
+
 bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs)
 {
 	return lhs.x == rhs.x && lhs.y == rhs.y && lhs.w == rhs.w && lhs.h == rhs.h;

@@ -4,6 +4,11 @@
 Font::Font(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath, const std::string& text) : Component("Font", obj), m_renderer(renderer), m_filepath(filepath), m_text(text)
 {
 	m_font = TTF_OpenFont(filepath.c_str(), 28);
+
+	if(m_text.size() != 0)
+	{
+		SetText(m_text);
+	}
 }
 
 Font::~Font()

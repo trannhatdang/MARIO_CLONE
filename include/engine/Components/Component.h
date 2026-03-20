@@ -10,6 +10,8 @@ class Component
 	protected:
 		std::string m_name = "Component";
 		GameObject* gameObject;
+
+		bool m_enabled = true;
 	public:
 		Component(const std::string& name, GameObject* gameObject);
 		virtual ~Component();
@@ -23,6 +25,9 @@ class Component
 		virtual std::unique_ptr<Component> copy() = 0;
 		GameObject* GetGameObject() const;
 		std::string GetName() const;
+
+		void SetActive(bool val);
+		bool GetActive() const;
 };
 
 #endif

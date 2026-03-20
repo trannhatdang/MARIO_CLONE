@@ -27,10 +27,13 @@ void SlowMovingBackground::OnIterate()
 
 	if((pos - m_new_pos).magnitude() < 200)
 	{
-		m_new_pos = pos + Vector3(rand() % 400 - 200, rand() % 400 - 200, 0);
+		while((pos - m_new_pos).magnitude() < 220)
+		{
+			m_new_pos = pos + Vector3(rand() % 400 - 200, rand() % 400 - 200, 0);
+		}
 	}
 
-	m_unit_vec = Vector3_GetUnitVector(m_new_pos);
+	m_unit_vec = Vector3_GetUnitVector(m_new_pos - pos);
 	m_tfs->SetPosition(pos + m_unit_vec);
 }
 

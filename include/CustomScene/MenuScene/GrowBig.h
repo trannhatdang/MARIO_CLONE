@@ -14,7 +14,7 @@ class GrowBig : public Component
 		void (*m_callBackFunc)() = nullptr;
 
 		float m_timeSinceLastGrowth = 0.0f;
-		float m_delay = 0.1f;
+		float m_delay = 0.001f;
 
 		int m_currScale = 0;
 		bool m_isBig = false;

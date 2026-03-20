@@ -9,7 +9,7 @@ Button::Button(GameObject* obj, void (*onClick)()) : Component("Button", obj), m
 		return;
 	}
 
-	m_rect = m_spr->GetDstRect();
+	m_rect = m_spr->GetViewport();
 }
 
 Button::~Button()

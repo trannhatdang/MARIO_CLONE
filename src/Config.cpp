@@ -1,11 +1,13 @@
 #include "Config.h"
 
 const int WINDOW_WIDTH = 1120;
-const int WINDOW_HEIGHT = 800;
+const int WINDOW_HEIGHT = 630;
 const std::string BACKGROUND_FILEPATH = ".\\data\\sprites\\background.png";
 const std::string BUTTON_FRAME_FILEPATH = ".\\data\\sprites\\buttonframe.png";
 const std::string PANEL_FILEPATH = ".\\data\\sprites\\panel.png";
+const std::string PANEL169_FILEPATH = ".\\data\\sprites\\panel169.png";
 const std::string BIG_PANEL_FILEPATH = ".\\data\\sprites\\big_panel.png";
+const std::string BIG_PANEL169_FILEPATH = ".\\data\\sprites\\big_panel169.png";
 const std::string RAT_FILEPATH = ".\\data\\sprites\\xdd.png";
 const std::string WORLD_IMG_ONE_FILEPATH = ".\\data\\sprites\\world1.png";
 const std::string WORLD_IMG_TWO_FILEPATH = ".\\data\\sprites\\world2.png";
@@ -33,14 +35,28 @@ std::string GetButtonFrameSprite()
 	return BUTTON_FRAME_FILEPATH;
 }
 
-std::string GetPanelSprite()
+std::string GetPanelSprite(bool aspect)
 {
-	return PANEL_FILEPATH;
+	if(aspect)
+	{
+		return PANEL169_FILEPATH;
+	}
+	else
+	{
+		return PANEL_FILEPATH;
+	}
 }
 
-std::string GetBigPanelSprite()
+std::string GetBigPanelSprite(bool aspect)
 {
-	return BIG_PANEL_FILEPATH;
+	if(aspect)
+	{
+		return BIG_PANEL169_FILEPATH;
+	}
+	else
+	{
+		return BIG_PANEL_FILEPATH;
+	}
 }
 
 std::string GetWorldImg(int index)

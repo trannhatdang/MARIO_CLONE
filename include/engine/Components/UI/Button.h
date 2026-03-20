@@ -9,7 +9,7 @@ class Button : public Component
 	private:
 		void (*m_onClick)() = nullptr;
 		SpriteRenderer* m_spr;
-		SDL_FRect m_rect;
+		SDL_Rect m_rect;
 
 		bool m_isHovered = false;
 	public:

@@ -31,6 +31,7 @@ void OpenStartGamePanel()
 
 void EnableStartGamePanelChildren()
 {
+	std::cout << "enabled" << std::endl;
 	int size = gamePanel.size();
 
 	for(int i = 0; i < size; ++i)
@@ -55,9 +56,6 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 	int world2 = save_data["save2"]["world"];
 	std::string name2 = save_data["save2"]["name"];
 	std::string playtime2 = save_data["save2"]["playtime"];
-	int world3 = save_data["save3"]["world"];
-	std::string name3 = save_data["save3"]["name"];
-	std::string playtime3 = save_data["save3"]["playtime"];
 
 	SDL_FRect background_srcrect;
 	background_srcrect.x = 0;
@@ -82,8 +80,8 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 	SDL_FRect startbutton_srcrect;
 	startbutton_srcrect.x = 0;
 	startbutton_srcrect.y = 0;
-	startbutton_srcrect.w = 92;
-	startbutton_srcrect.h = 92;
+	startbutton_srcrect.w = 160;
+	startbutton_srcrect.h = 90;
 
 	SDL_FRect startbutton_dstrect;
 	startbutton_dstrect.x = 0;
@@ -105,7 +103,7 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 
 	auto startButton = gameScene->AddGameObject("StartButton", "Button");
 	startButton->GetTransform()->SetPosition({ 560, 500, 0 });
-	startButton->AddComponent(new SpriteRenderer(startButton, renderer, GetPanelSprite(), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+	startButton->AddComponent(new SpriteRenderer(startButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
 	startButton->AddComponent(new Button(startButton, &OpenStartGamePanel));
 
 	auto startFont = gameScene->AddGameObject("StartFont", "Font");
