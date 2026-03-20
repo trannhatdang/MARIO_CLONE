@@ -22,8 +22,8 @@ class GrowBig : public Component
 		void OnIterate();
 		std::unique_ptr<Component> copy();
 
-		void TurnOn();
-		void TurnOff();
+		void TurnOn(void (*callBackFunc)() = nullptr);
+		void TurnOff(void (*callBackFunc)() = nullptr);
 };
 
 #endif

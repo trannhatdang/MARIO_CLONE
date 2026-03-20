@@ -47,12 +47,22 @@ std::unique_ptr<Component> GrowBig::copy()
 	return std::make_unique<GrowBig>(gameObject, m_onRect);
 }
 
-void GrowBig::TurnOn()
+void GrowBig::TurnOn(void (*callBackFunc)())
 {
 	m_isBig = true;
+
+	if(callBackFunc)
+	{
+		callBackFunc();
+	}
 }
 
-void GrowBig::TurnOff()
+void GrowBig::TurnOff(void (*callBackFunc)())
 {
 	m_isBig = false;
+
+	if(callBackFunc)
+	{
+		callBackFunc();
+	}
 }

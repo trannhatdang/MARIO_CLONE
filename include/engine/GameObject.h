@@ -14,6 +14,8 @@ class GameObject
 		std::string m_name;
 		std::string m_tag;
 		Scene* m_scene;
+
+		bool m_enabled = false;
 	public:
 		GameObject(Scene* scene, std::string name = "GameObject", std::string tag = "Entity");
 		GameObject(const GameObject& gameObject);
@@ -32,6 +34,8 @@ class GameObject
 		Scene* GetScene() const;
 		Component* AddComponent(Component* component);
 		Component* CopyComponent(const std::unique_ptr<Component>& component);
+
+		void SetActive(bool val);
 };
 
 #endif

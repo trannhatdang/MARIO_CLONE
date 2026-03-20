@@ -10,13 +10,14 @@ class SpriteRenderer : public Component
 {
 	private:
 		SDL_Texture* m_texture;
+		Vector3f m_anchor;
 		SDL_FRect m_srcrect;
 		SDL_FRect m_dstrect;
 
 		std::string filepath;
 		SDL_Renderer* m_renderer;
 	public:
-		SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect);
+		SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, const std::string& filepath, Vector3f anchor, SDL_FRect srcrect, SDL_FRect dstrect);
 		~SpriteRenderer();
 		void OnStart();
 		void OnIterate();

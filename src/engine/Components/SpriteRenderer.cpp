@@ -1,9 +1,10 @@
 #include "engine/Components/SpriteRenderer.h"
 #include "engine/GameObject.h"
 
-SpriteRenderer::SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect) : Component("SpriteRenderer", gameObject), m_srcrect(srcrect), m_dstrect(dstrect), filepath(filepath), m_renderer(renderer)
+SpriteRenderer::SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, const std::string& filepath, Vector3f anchor, SDL_FRect srcrect, SDL_FRect dstrect) : Component("SpriteRenderer", gameObject), m_anchor(anchor), m_srcrect(srcrect), m_dstrect(dstrect), filepath(filepath), m_renderer(renderer)
 {
 	m_texture = CreateTextureFromPNG(renderer, filepath);
+	m_anchor = Vector3f_GetUnitVector(m_anchor);
 }
 
 SpriteRenderer::~SpriteRenderer() 
@@ -29,7 +30,11 @@ void SpriteRenderer::OnDraw(SDL_Renderer* renderer)
 	Vector3 cameraPos = GetCameraPos();
 
 	viewport.x = std::min(std::max(pos.x - cameraPos.x, -10000), 10000);
+	viewport.x = viewport.x - m_dstrect.w * m_anchor.x;
+
 	viewport.y = std::min(std::max(pos.y - cameraPos.y, -10000), 10000);
+	viewport.y = viewport.y - m_dstrect.w * m_anchor.y;
+
 	viewport.w = m_dstrect.w;
 	viewport.h = m_dstrect.h;
 
@@ -43,7 +48,7 @@ void SpriteRenderer::OnEvent(SDL_Event* event)
 
 std::unique_ptr<Component> SpriteRenderer::copy()
 {
-	return std::make_unique<SpriteRenderer>(gameObject, m_renderer, filepath, m_srcrect, m_dstrect);
+	return std::make_unique<SpriteRenderer>(gameObject, m_renderer, filepath, m_anchor, m_srcrect, m_dstrect);
 }
 
 SDL_FRect SpriteRenderer::GetDstRect() const

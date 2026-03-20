@@ -13,6 +13,9 @@
 #include "SlowMovingBackground.h"
 #include "Config.h"
 
+void CloseStartGamePanel();
+void OpenStartGamePanel();
+void EnableStartGamePanelChildren();
 void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene);
 
 #endif
