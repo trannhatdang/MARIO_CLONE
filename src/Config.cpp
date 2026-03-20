@@ -4,6 +4,7 @@ const int WINDOW_WIDTH = 1120;
 const int WINDOW_HEIGHT = 630;
 const std::string BACKGROUND_FILEPATH = ".\\data\\sprites\\background.png";
 const std::string BUTTON_FRAME_FILEPATH = ".\\data\\sprites\\buttonframe.png";
+const std::string BACK_ICON_FRAMED_FILEPATH = ".\\data\\sprites\\back-icon-framed.png";
 const std::string PANEL_FILEPATH = ".\\data\\sprites\\panel.png";
 const std::string PANEL169_FILEPATH = ".\\data\\sprites\\panel169.png";
 const std::string BIG_PANEL_FILEPATH = ".\\data\\sprites\\big_panel.png";
@@ -33,6 +34,11 @@ std::string GetBackgroundSprite()
 std::string GetButtonFrameSprite()
 {
 	return BUTTON_FRAME_FILEPATH;
+}
+
+std::string GetBackIconFramedSprite()
+{
+	return BACK_ICON_FRAMED_FILEPATH;
 }
 
 std::string GetPanelSprite(bool aspect)

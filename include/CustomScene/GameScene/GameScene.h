@@ -1,6 +1,7 @@
 #ifndef GAME_SCENE_H_
 #define GAME_SCENE_H_
 
+#include <fstream>
 #include "engine/scene.h"
 #include "engine/Components/SpriteRenderer.h"
 #include "engine/Components/Rigidbody.h"
@@ -8,7 +9,9 @@
 #include "engine/Components/Animator.h"
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
+#include "nlohmann/json.hpp"
+#include "Config.h"
 
-void GenerateGameScene(const std::unique_ptr<Scene>& gameScene);
+void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)());
 
 #endif

@@ -112,6 +112,11 @@ const std::vector<BoxCollider*>& Scene::GetColliders() const
 	return m_colliders;
 };
 
+void Scene::ChangeScene(int val)
+{
+	(*m_changeSceneCallback)(val);
+}
+
 void Scene::DEBUG_PrintGameObjAdd() const
 {
 	std::cout << "OBJ ADD: " << std::endl;

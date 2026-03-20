@@ -16,9 +16,11 @@
 #include "Config.h"
 #include "nlohmann/json.hpp"
 
+void ChangeToGameSceneSave1();
+void ChangeToGameSceneSave2();
 void CloseStartGamePanel();
 void OpenStartGamePanel();
 void EnableStartGamePanelChildren();
-void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene);
+void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrSaveFunc)(int));
 
 #endif

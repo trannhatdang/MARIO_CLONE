@@ -10,8 +10,6 @@
 #include "CustomScene/GameScene/GameScene.h"
 #include "CustomScene/MenuScene/MenuScene.h"
 #include "CustomScene/IntroScene/IntroScene.h"
-#include <iostream>
-#include <fstream>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -24,6 +22,7 @@ static std::chrono::milliseconds frametime = std::chrono::milliseconds(16);
 static std::chrono::time_point<std::chrono::system_clock> last_iterate_point = std::chrono::system_clock::now();
 
 static Vector3 CameraPos;
+static int currSave = 0;
 
 Vector3 GetCameraPos()
 {
@@ -38,6 +37,17 @@ static void SetCameraPos(Vector3 pos)
 static void ChangeScene(int index)
 {
 	currScene = scenes[index].get();
+	currScene->OnStart();
+}
+
+static void SetCurrSave(int index)
+{
+	currSave = index;
+}
+
+static int GetCurrSave()
+{
+	return currSave;
 }
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
@@ -51,7 +61,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}
-	SDL_LoadPNG("lmao");
 	
 	if(!SDL_CreateWindowAndRenderer(windowCaption, GetWindowWidth(), GetWindowHeight(), SDL_WINDOW_RESIZABLE, &window, &renderer))
 	{
@@ -72,8 +81,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 	scenes[2] = std::make_unique<Scene>("GameScene", &ChangeScene, renderer, window);
 
 	GenerateIntroScene(scenes[0]);
-	GenerateMenuScene(scenes[1]);
-	GenerateGameScene(scenes[2]);
+	GenerateMenuScene(scenes[1], &SetCurrSave);
+	GenerateGameScene(scenes[2], &GetCurrSave);
 
 	ChangeScene(1);
 
@@ -110,6 +119,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 	{
 		return SDL_APP_SUCCESS;
 	}
+
 	currScene->OnEvent(event);
 	return SDL_APP_CONTINUE;
 }

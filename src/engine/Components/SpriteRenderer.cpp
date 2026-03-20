@@ -50,7 +50,7 @@ void SpriteRenderer::OnDraw(SDL_Renderer* renderer)
 	DrawTexture(renderer, m_texture, viewport, m_srcrect, m_dstrect);
 }
 
-void SpriteRenderer::OnEvent(SDL_Event* event) 
+void SpriteRenderer::OnEvent(SDL_Event* event)
 {
 
 }
