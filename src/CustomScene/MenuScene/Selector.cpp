@@ -22,7 +22,7 @@ void Selector::OnIterate()
 		{
 			Vector3 other_pos = obj->GetTransform()->GetPosition();
 
-			m_tfs->SetPosition(other_pos - Vector3(130, 0, 0));
+			m_tfs->SetPosition(other_pos);
 		}
 	}
 }

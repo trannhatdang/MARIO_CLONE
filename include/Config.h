@@ -11,17 +11,10 @@ std::string GetBKLogoIntroVideo();
 std::string GetBackgroundSprite();
 std::string GetButtonFrameSprite();
 std::string GetPanelSprite();
+std::string GetBigPanelSprite();
 std::string GetWorldImg(int index);
 std::string GetSelectorSprite();
-std::string GetPlayerTopdownSprite(int index);
-std::string GetPlayerTwoTopdownSprite(int index);
-std::string GetPlayerSpriteSheet();
-std::string GetPlayerTwoSpriteSheet();
-std::string GetGrassSpriteSheet();
-std::string GetBallSprite();
-std::string GetArrowSprite();
-std::string GetUnselectedArrowSprite();
-std::string GetSelectedArrowSprite();
+std::string GetSaveFile();
 std::string GetFont();
 
 #endif

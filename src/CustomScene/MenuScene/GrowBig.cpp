@@ -9,6 +9,8 @@ GrowBig::GrowBig(GameObject* obj, SDL_FRect onRect, float delay) : Component("Gr
 	{
 		return;
 	}
+
+	m_spr->SetDstRect({0, 0, 0, 0});
 }
 
 GrowBig::~GrowBig()

@@ -10,6 +10,11 @@
 #include "CustomScene/GameScene/GameScene.h"
 #include "CustomScene/MenuScene/MenuScene.h"
 #include "CustomScene/IntroScene/IntroScene.h"
+#include <iostream>
+#include <fstream>
+#include "nlohmann/json.hpp"
+
+using json = nlohmann::json;
 
 static SDL_Renderer* renderer = nullptr;
 static SDL_Window* window = nullptr;

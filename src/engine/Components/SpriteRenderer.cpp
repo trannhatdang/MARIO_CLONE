@@ -4,7 +4,7 @@
 SpriteRenderer::SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, const std::string& filepath, Vector3f anchor, SDL_FRect srcrect, SDL_FRect dstrect) : Component("SpriteRenderer", gameObject), m_anchor(anchor), m_srcrect(srcrect), m_dstrect(dstrect), filepath(filepath), m_renderer(renderer)
 {
 	m_texture = CreateTextureFromPNG(renderer, filepath);
-	m_anchor = Vector3f_GetUnitVector(m_anchor);
+	//m_anchor = Vector3f_GetUnitVector(m_anchor);
 }
 
 SpriteRenderer::~SpriteRenderer() 
@@ -33,7 +33,7 @@ void SpriteRenderer::OnDraw(SDL_Renderer* renderer)
 	viewport.x = viewport.x - m_dstrect.w * m_anchor.x;
 
 	viewport.y = std::min(std::max(pos.y - cameraPos.y, -10000), 10000);
-	viewport.y = viewport.y - m_dstrect.w * m_anchor.y;
+	viewport.y = viewport.y - m_dstrect.h * m_anchor.y;
 
 	viewport.w = m_dstrect.w;
 	viewport.h = m_dstrect.h;

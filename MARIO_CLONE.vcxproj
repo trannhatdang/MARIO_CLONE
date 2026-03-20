@@ -143,7 +143,10 @@
     <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\GameScene.cpp" />
     <ClCompile Include="src\CustomScene\IntroScene\IntroScene.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\GrowBig.cpp" />
     <ClCompile Include="src\CustomScene\MenuScene\MenuScene.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\Selector.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\SlowMovingBackground.cpp" />
     <ClCompile Include="src\engine\Animation.cpp" />
     <ClCompile Include="src\engine\Components\Animator.cpp" />
     <ClCompile Include="src\engine\Components\BoxCollider.cpp" />
@@ -153,7 +156,7 @@
     <ClCompile Include="src\engine\Components\SpriteRenderer.cpp" />
     <ClCompile Include="src\engine\Components\Tilemap.cpp" />
     <ClCompile Include="src\engine\Components\Transform.cpp" />
-    <ClCompile Include="src\engine\Components\VideoPlayer.cpp" />
+    <ClCompile Include="src\engine\Components\UI\Button.cpp" />
     <ClCompile Include="src\engine\dg_engine_std.cpp" />
     <ClCompile Include="src\engine\dg_texture.cpp" />
     <ClCompile Include="src\engine\dg_time.cpp" />
@@ -181,7 +184,9 @@
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\CustomScene\GameScene\GameScene.h" />
     <ClInclude Include="include\CustomScene\IntroScene\IntroScene.h" />
+    <ClInclude Include="include\CustomScene\MenuScene\GrowBig.h" />
     <ClInclude Include="include\CustomScene\MenuScene\MenuScene.h" />
+    <ClInclude Include="include\CustomScene\MenuScene\Selector.h" />
     <ClInclude Include="include\CustomScene\MenuScene\SlowMovingBackground.h" />
     <ClInclude Include="include\engine\Animation.h" />
     <ClInclude Include="include\engine\AnimationNode.h" />
@@ -201,6 +206,7 @@
     <ClInclude Include="include\engine\GameObject.h" />
     <ClInclude Include="include\engine\main.h" />
     <ClInclude Include="include\engine\Scene.h" />
+    <ClInclude Include="include\nlohmann\json.hpp" />
     <ClInclude Include="include\SDL3\SDL.h" />
     <ClInclude Include="include\SDL3\SDL_assert.h" />
     <ClInclude Include="include\SDL3\SDL_asyncio.h" />

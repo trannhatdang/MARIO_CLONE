@@ -15,7 +15,7 @@ class GameObject
 		std::string m_tag;
 		Scene* m_scene;
 
-		bool m_enabled = false;
+		bool m_enabled = true;
 	public:
 		GameObject(Scene* scene, std::string name = "GameObject", std::string tag = "Entity");
 		GameObject(const GameObject& gameObject);

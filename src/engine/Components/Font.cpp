@@ -67,6 +67,8 @@ std::unique_ptr<Component> Font::copy()
 
 void Font::SetText(const std::string& txt)
 {
+	if(txt.size() == 0) return;
+
 	m_text = txt;
 	createTexture();
 }

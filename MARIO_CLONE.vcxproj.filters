@@ -22,7 +22,6 @@
     <ClCompile Include="src\engine\Components\SpriteRenderer.cpp" />
     <ClCompile Include="src\engine\Components\Tilemap.cpp" />
     <ClCompile Include="src\engine\Components\Transform.cpp" />
-    <ClCompile Include="src\engine\Components\VideoPlayer.cpp" />
     <ClCompile Include="src\engine\Animation.cpp" />
     <ClCompile Include="src\engine\dg_engine_std.cpp" />
     <ClCompile Include="src\engine\dg_texture.cpp" />
@@ -32,6 +31,10 @@
     <ClCompile Include="src\engine\Scene.cpp" />
     <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\GrowBig.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\Selector.cpp" />
+    <ClCompile Include="src\CustomScene\MenuScene\SlowMovingBackground.cpp" />
+    <ClCompile Include="src\engine\Components\UI\Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -389,6 +392,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\MenuScene\GrowBig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\MenuScene\Selector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\nlohmann\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,6 +27,7 @@ void GameObject::OnStart()
 
 void GameObject::OnFixedIterate()
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
@@ -36,6 +37,7 @@ void GameObject::OnFixedIterate()
 
 void GameObject::OnIterate()
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
@@ -45,6 +47,7 @@ void GameObject::OnIterate()
 
 void GameObject::OnDraw(SDL_Renderer* renderer)
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
@@ -54,6 +57,7 @@ void GameObject::OnDraw(SDL_Renderer* renderer)
 
 void GameObject::OnEvent(SDL_Event* event)
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
@@ -63,6 +67,7 @@ void GameObject::OnEvent(SDL_Event* event)
 
 void GameObject::OnCollisionEnter(GameObject* obj)
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
@@ -72,6 +77,7 @@ void GameObject::OnCollisionEnter(GameObject* obj)
 
 void GameObject::OnTriggerEnter(GameObject* obj)
 {
+	if(!m_enabled) return;
 	int size = this->m_components.size();
 	for(auto i = 0; i < size; ++i)
 	{
