@@ -1,6 +1,7 @@
 #ifndef MENU_SCENE_H_
 #define MENU_SCENE_H_
 
+#include <fstream>
 #include "engine/scene.h"
 #include "engine/Components/SpriteRenderer.h"
 #include "engine/Components/Rigidbody.h"
@@ -12,6 +13,7 @@
 #include "GrowBig.h"
 #include "SlowMovingBackground.h"
 #include "Config.h"
+#include "nlohmann/json.hpp"
 
 void CloseStartGamePanel();
 void OpenStartGamePanel();

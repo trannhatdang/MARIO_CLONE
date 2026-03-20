@@ -8,6 +8,10 @@ const std::string BK_LOGO_INTRO_VIDEO_FILEPATH = ".\\data\\media\\ratintro.mp4";
 const std::string BACKGROUND_FILEPATH = ".\\data\\sprites\\background.png";
 const std::string BUTTON_FRAME_FILEPATH = ".\\data\\sprites\\buttonframe.png";
 const std::string PANEL_FILEPATH = ".\\data\\sprites\\panel.png";
+const std::string WORLD_IMG_ONE_FILEPATH = ".\\data\\sprites\\world1.png";
+const std::string WORLD_IMG_TWO_FILEPATH = ".\\data\\sprites\\world2.png";
+const std::string WORLD_IMG_THREE_FILEPATH = ".\\data\\sprites\\world3.png";
+const std::string WORLD_IMG_NEW_SAVE_FILEPATH = ".\\data\\sprites\\new_save.png";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\megaman-top.png";
 const std::string PLAYER_TOP_RIGHT_FILEPATH = ".\\data\\sprites\\megaman-top-right.png";
 const std::string PLAYER_TOP_DOWN_FILEPATH = ".\\data\\sprites\\megaman-top-down.png";
@@ -60,6 +64,24 @@ std::string GetButtonFrameSprite()
 std::string GetPanelSprite()
 {
 	return PANEL_FILEPATH;
+}
+
+std::string GetWorldImg(int index)
+{
+	switch(index)
+	{
+		case 0:
+			return WORLD_IMG_ONE_FILEPATH;
+			break;
+		case 1:
+			return WORLD_IMG_TWO_FILEPATH;
+			break;
+		case 2:
+			return WORLD_IMG_THREE_FILEPATH;
+			break;
+		default:
+			return WORLD_IMG_NEW_SAVE_FILEPATH;
+	}
 }
 
 std::string GetPlayerTopdownSprite(int index)

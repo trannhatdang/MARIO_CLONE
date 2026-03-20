@@ -40,6 +40,19 @@ void GrowBig::OnIterate()
 	{
 		m_spr->SetDstRect(MultRect(m_onRect, --m_currScale / 100.0f));
 	}
+
+	if(!m_callBackFunc)
+	{
+		return;
+	}
+
+	if((m_isBig && m_currScale == 100)
+		|| (!m_isBig && m_currScale == 0))
+	{
+		m_callBackFunc();
+	}
+
+	m_callBackFunc = nullptr;
 }
 
 std::unique_ptr<Component> GrowBig::copy()
