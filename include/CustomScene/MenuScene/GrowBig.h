@@ -11,6 +11,8 @@ class GrowBig : public Component
 		SpriteRenderer* m_spr = nullptr;
 		SDL_FRect m_onRect;
 
+		void (*m_callBackFunc)() = nullptr;
+
 		float m_timeSinceLastGrowth = 0.0f;
 		float m_delay = 0.1f;
 

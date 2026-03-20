@@ -50,19 +50,11 @@ std::unique_ptr<Component> GrowBig::copy()
 void GrowBig::TurnOn(void (*callBackFunc)())
 {
 	m_isBig = true;
-
-	if(callBackFunc)
-	{
-		callBackFunc();
-	}
+	m_callBackFunc = callBackFunc;
 }
 
 void GrowBig::TurnOff(void (*callBackFunc)())
 {
 	m_isBig = false;
-
-	if(callBackFunc)
-	{
-		callBackFunc();
-	}
+	m_callBackFunc = callBackFunc;
 }
