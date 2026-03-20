@@ -195,4 +195,24 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 	startButton->GetTransform()->SetPosition({ 560, 500, 0 });
 	startButton->AddComponent(new SpriteRenderer(startButton, renderer, GetButtonFrameSprite(), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
 	startButton->AddComponent(new Button(startButton, &OpenStartGamePanel));
+
+	auto startFont = gameScene->AddGameObject("StartFont", "Font");
+	startFont->GetTransform()->SetPosition({ 500, 480, 0});
+	startFont->AddComponent(new Font(startFont, renderer, GetFont(), "Start"));
+
+	SDL_FRect selector_srcrect;
+	selector_srcrect.x = 0;
+	selector_srcrect.y = 0;
+	selector_srcrect.w = 40;
+	selector_srcrect.h = 40;
+
+	SDL_FRect selector_dstrect;
+	selector_dstrect.x = 0;
+	selector_dstrect.y = 0;
+	selector_dstrect.w = 40;
+	selector_dstrect.h = 40;
+
+	auto menuSelector = gameScene->AddGameObject("MenuSelector", "Selector");
+	menuSelector->AddComponent(new SpriteRenderer(menuSelector, renderer, GetSelectorSprite(), { 0, 0, 0 }, selector_srcrect, selector_dstrect));
+	menuSelector->AddComponent(new Selector(menuSelector, { startButton }));
 }

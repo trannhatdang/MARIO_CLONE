@@ -19,7 +19,7 @@ class Font : public Component
 
 		void createTexture();
 	public:
-		Font(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath);
+		Font(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath, const std::string& text = "");
 		~Font();
 		void OnIterate();
 		void OnDraw(SDL_Renderer* renderer);

@@ -24,7 +24,23 @@ void Button::OnIterate()
 
 void Button::OnEvent(SDL_Event* event)
 {
-	if(!m_spr) return;
+	if(!m_spr)
+	{
+		return;
+	}
+
+	if(event->type == SDL_EVENT_MOUSE_MOTION)
+	{
+		auto mouseEvent = event->motion;
+		float x = mouseEvent.x;
+		float y = mouseEvent.y;
+
+		Vector3 pos = Vector3(x, y, 0);
+
+		bool pointInsideRect = IsPointInsideRect(pos, m_rect);
+		m_isHovered = pointInsideRect;
+		return;
+	}
 
 	if(event->type != SDL_EVENT_MOUSE_BUTTON_DOWN || !event->key.down)
 	{
@@ -47,4 +63,9 @@ void Button::OnEvent(SDL_Event* event)
 std::unique_ptr<Component> Button::copy()
 {
 	return std::make_unique<Button>(gameObject);
+}
+
+bool Button::IsHovered() const
+{
+	return m_isHovered;
 }

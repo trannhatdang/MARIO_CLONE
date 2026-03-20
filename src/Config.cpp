@@ -12,6 +12,7 @@ const std::string WORLD_IMG_ONE_FILEPATH = ".\\data\\sprites\\world1.png";
 const std::string WORLD_IMG_TWO_FILEPATH = ".\\data\\sprites\\world2.png";
 const std::string WORLD_IMG_THREE_FILEPATH = ".\\data\\sprites\\world3.png";
 const std::string WORLD_IMG_NEW_SAVE_FILEPATH = ".\\data\\sprites\\new_save.png";
+const std::string SELECTOR_FILEPATH = ".\\data\\sprites\\selector.png";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\megaman-top.png";
 const std::string PLAYER_TOP_RIGHT_FILEPATH = ".\\data\\sprites\\megaman-top-right.png";
 const std::string PLAYER_TOP_DOWN_FILEPATH = ".\\data\\sprites\\megaman-top-down.png";
@@ -82,6 +83,11 @@ std::string GetWorldImg(int index)
 		default:
 			return WORLD_IMG_NEW_SAVE_FILEPATH;
 	}
+}
+
+std::string GetSelectorSprite()
+{
+	return SELECTOR_FILEPATH;
 }
 
 std::string GetPlayerTopdownSprite(int index)

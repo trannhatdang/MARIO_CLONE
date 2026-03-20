@@ -10,12 +10,16 @@ class Button : public Component
 		void (*m_onClick)() = nullptr;
 		SpriteRenderer* m_spr;
 		SDL_FRect m_rect;
+
+		bool m_isHovered = false;
 	public:
 		Button(GameObject* obj, void (*onClick)() = nullptr);
 		~Button();
 		void OnIterate();
 		void OnEvent(SDL_Event* event);
 		std::unique_ptr<Component> copy();
+
+		bool IsHovered() const;
 };
 
 #endif

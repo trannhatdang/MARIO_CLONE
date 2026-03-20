@@ -1,7 +1,7 @@
 #include "engine/Components/Font.h"
 #include "engine/GameObject.h"
 
-Font::Font(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath) : Component("Font", obj), m_renderer(renderer), m_filepath(filepath)
+Font::Font(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath, const std::string& text) : Component("Font", obj), m_renderer(renderer), m_filepath(filepath), m_text(text)
 {
 	m_font = TTF_OpenFont(filepath.c_str(), 28);
 }
@@ -60,7 +60,9 @@ void Font::OnDraw(SDL_Renderer* renderer)
 
 std::unique_ptr<Component> Font::copy()
 {
-	return std::make_unique<Font>(gameObject, m_renderer, m_filepath);
+	Font* font = new Font(gameObject, m_renderer, m_filepath);
+	font->SetText(m_text);
+	return std::unique_ptr<Font>(font);
 }
 
 void Font::SetText(const std::string& txt)
