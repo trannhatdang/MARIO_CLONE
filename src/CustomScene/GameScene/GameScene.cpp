@@ -2,7 +2,50 @@
 
 using json = nlohmann::json;
 
+const int SKY_TILE = 0;
+const int GRASS_TILE = 1;
+const int GROUND_TILE = 2;
+const int BLOCK_TILE = 3;
+
 int currSave = 0;
+
+SDL_FRect tile_dstrect = { 0, 0, 50, 50};
+
+std::vector<GameObject*> world1;
+
+void SetActiveWorld1(bool val)
+{
+	for(auto it : world1)
+	{
+		it->SetActive(val);
+	}
+}
+
+void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
+{
+	SDL_Renderer* renderer = gameScene->GetRenderer();
+
+	std::vector<std::vector<int>> world1_map = {
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{},
+		{}
+	};
+
+	auto tilemap = gameScene->AddGameObject("Tilemap", "Tilemap");
+	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
+	world1.push_back(tilemap);
+
+	SetActiveWorld1(false);
+}
 
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)())
 {
@@ -23,6 +66,14 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSav
 		currWorld = world2;
 	}
 
+	GenerateWorld1(gameScene);
 
-
+	switch(currWorld)
+	{
+		case 1:
+			SetActiveWorld1(true);
+			break;
+		default:
+			break;
+	}
 }

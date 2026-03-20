@@ -16,6 +16,7 @@ std::string GetBigPanelSprite(bool aspect = false);
 std::string GetWorldImg(int index);
 std::string GetSelectorSprite();
 std::string GetSaveFile();
+std::string GetTilemap();
 std::string GetFont();
 
 #endif

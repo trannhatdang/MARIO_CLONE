@@ -16,6 +16,7 @@ const std::string WORLD_IMG_THREE_FILEPATH = ".\\data\\sprites\\world3.png";
 const std::string WORLD_IMG_NEW_SAVE_FILEPATH = ".\\data\\sprites\\new_save.png";
 const std::string SELECTOR_FILEPATH = ".\\data\\sprites\\selector.png";
 const std::string SAVE_FILE_FILEPATH = ".\\data\\save\\save.json";
+const std::string TILEMAP_FILEPATH = ".\\data\\sprites\\tilemap.png";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
 
 int GetWindowWidth(){
@@ -92,6 +93,11 @@ std::string GetSaveFile()
 {
 	return SAVE_FILE_FILEPATH;
 }
+
+std::string GetTilemap()
+{
+	return TILEMAP_FILEPATH;
+}	
 
 std::string GetFont()
 {
