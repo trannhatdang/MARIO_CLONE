@@ -1,8 +1,19 @@
 #include "CustomScene/MenuScene/MenuScene.h"
 
+GrowBig* growBigComp;
+
+void CloseStartGamePanel()
+{
+	if(!growBigComp) return;
+
+	growBigComp->TurnOff();
+}
+
 void OpenStartGamePanel()
 {
+	if(!growBigComp) return;
 
+	growBigComp->TurnOn();
 }
 
 void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
@@ -38,7 +49,7 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& gameScene)
 
 	auto startGamePanel = gameScene->AddGameObject("StartGamePanel", "Panel");
 	startGamePanel->AddComponent(new SpriteRenderer(startGamePanel, renderer, GetPanelSprite(), panel_srcrect, panel_dstrect));
-	auto growBigComp = startGamePanel->AddComponent(new GrowBig(startGamePanel));
+	growBigComp = static_cast<GrowBig*>(startGamePanel->AddComponent(new GrowBig(startGamePanel)));
 
 	SDL_FRect startbutton_srcrect;
 	startbutton_srcrect.x = 0;

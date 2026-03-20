@@ -25,6 +25,7 @@ class SpriteRenderer : public Component
 		std::unique_ptr<Component> copy();
 
 		SDL_FRect GetDstRect() const;
+		void SetDstRect(SDL_FRect dstrect);
 };
 
 #endif

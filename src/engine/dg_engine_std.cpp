@@ -26,7 +26,23 @@ void DrawTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport
 	SDL_SetRenderViewport(renderer, NULL);
 }
 
-bool IsPointInsideRect(Vector3 vec, SDL_FRect rect)
+bool IsPointInsideRect(const Vector3& vec, const SDL_FRect& rect)
 {
 	return vec.x >= rect.x && vec.y >= rect.y && vec.x <= (rect.x + rect.w) && vec.y <= (rect.y + rect.h);
+}
+
+bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs)
+{
+	return lhs.x == rhs.x && lhs.y == rhs.y && lhs.w == rhs.w && lhs.h == rhs.h;
+}
+
+SDL_FRect MultRect(const SDL_FRect& rect, float mult)
+{
+	SDL_FRect new_rect = rect;
+	new_rect.x *= mult;
+	new_rect.y *= mult;
+	new_rect.w *= mult;
+	new_rect.h *= mult;
+
+	return new_rect;
 }

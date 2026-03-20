@@ -15,5 +15,7 @@ const int BOX_POS_EVENT = SDL_RegisterEvents(1);
 SDL_Texture* CreateTextureFromPNG(SDL_Renderer* renderer, const std::string& filepath);
 void DrawTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport, SDL_FRect srcrect, SDL_FRect dstrect);
 bool IsPointInsideRect(Vector3 vec, SDL_FRect rect);
+bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs);
+SDL_FRect MultRect(const SDL_FRect& rect, float mult);
 
 #endif

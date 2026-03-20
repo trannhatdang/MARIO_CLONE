@@ -3,14 +3,21 @@
 
 #include "engine/Components/Component.h"
 #include "engine/Components/SpriteRenderer.h"
+#include "engine/dg_time.h"
 
 class GrowBig : public Component
 {
 	private:
-		bool m_isBig = false;
 		SpriteRenderer* m_spr = nullptr;
+		SDL_FRect m_onRect;
+
+		float m_timeSinceLastGrowth = 0.0f;
+		float m_delay = 0.1f;
+
+		int m_currScale = 0;
+		bool m_isBig = false;
 	public:
-		GrowBig(GameObject* obj);
+		GrowBig(GameObject* obj, SDL_FRect onRect, float delay = 0.1f);
 		~GrowBig();
 		void OnIterate();
 		std::unique_ptr<Component> copy();

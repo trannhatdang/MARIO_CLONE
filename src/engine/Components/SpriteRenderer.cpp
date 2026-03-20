@@ -50,3 +50,8 @@ SDL_FRect SpriteRenderer::GetDstRect() const
 {
 	return m_dstrect;
 }
+
+void SpriteRenderer::SetDstRect(SDL_FRect dstrect)
+{
+	m_dstrect = dstrect;
+}
