@@ -1,6 +1,6 @@
 #include "engine/Animation.h"
 
-Animation::Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, int scale) : m_srcrect(srcrect), m_dstrect(dstrect), m_num_frames(num_frames), m_scale(scale), m_filepath(filepath)
+Animation::Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, int scale) : m_srcrect(srcrect), m_dstrect(dstrect), m_filepath(filepath), m_num_frames(num_frames), m_scale(scale)
 {
 	m_texture = CreateTextureFromPNG(renderer, filepath);
 }

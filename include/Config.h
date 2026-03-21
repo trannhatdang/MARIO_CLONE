@@ -21,6 +21,8 @@ std::string GetRocketSprite();
 std::string GetRocket2Sprite();
 std::string GetRocket3Sprite();
 std::string GetWorld1Csv();
+std::string GetEnemyWorld1Csv();
+std::string GetSniperSpriteSheet();
 std::string GetFont();
 
 #endif

@@ -21,6 +21,5 @@ bool IsPointInsideRect(const Vector3& vec, const SDL_Rect& rect);
 bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs);
 SDL_FRect MultRect(const SDL_FRect& rect, float mult);
 std::vector<std::vector<int>> GetMapFromCsv(const std::string& filepath);
-std::vector<Vector3> GetPosFromCsv(const std::string& filepath);
 
 #endif

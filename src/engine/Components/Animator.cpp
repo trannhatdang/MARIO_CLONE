@@ -76,7 +76,6 @@ AnimationNode* Animator::AddAnimation(AnimationNode* node)
 AnimationNode* Animator::CopyAnyNode(AnimationNode* node)
 {
 	return nullptr;
-
 }
 
 AnimationNode* Animator::GetAnyNode()
