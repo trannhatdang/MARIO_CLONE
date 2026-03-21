@@ -68,6 +68,17 @@ void EnableStartGamePanelChildren()
 
 void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrSaveFunc)(int))
 {
+	/*std::vector<std::vector<int>> world1_map = GetMapFromCsv(GetWorld1Csv());
+	for(int i = 0; i < world1_map.size(); ++i)
+	{
+		for(int j = 0; j < world1_map[i].size(); ++j)
+		{
+			std::cout << world1_map[i][j] << ' ';
+		}
+
+		std::cout << '\n';
+	}*/
+
 	gamePanel.reserve(20);
 	currScene = menuScene.get();
 	//READ SAVEFILE DATA

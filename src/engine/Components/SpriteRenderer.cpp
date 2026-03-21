@@ -8,7 +8,6 @@ SpriteRenderer::SpriteRenderer(GameObject* gameObject, SDL_Renderer* renderer, c
 	{
 		m_anchor = {0, 0, 0};
 	}
-	//m_anchor = Vector3f_GetUnitVector(m_anchor);
 }
 
 SpriteRenderer::~SpriteRenderer() 

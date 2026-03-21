@@ -35,6 +35,9 @@
     <ClCompile Include="src\CustomScene\MenuScene\Selector.cpp" />
     <ClCompile Include="src\CustomScene\MenuScene\SlowMovingBackground.cpp" />
     <ClCompile Include="src\engine\Components\UI\Button.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Rocket.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\RocketSpawner.cpp" />
+    <ClCompile Include="src\engine\Components\TilemapCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -401,6 +404,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\nlohmann\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Rocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\RocketSpawner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\Components\TilemapCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

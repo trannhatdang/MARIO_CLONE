@@ -25,29 +25,22 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 {
 	SDL_Renderer* renderer = gameScene->GetRenderer();
 
-	std::vector<std::vector<int>> world1_map = {
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{},
-		{}
-	};
+	std::vector<std::vector<int>> world1_map = GetMapFromCsv(GetWorld1Csv());
 
 	auto tilemap = gameScene->AddGameObject("Tilemap", "Tilemap");
 	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
 	world1.push_back(tilemap);
 
+	SDL_FRect rocket_srcrect = { 0, 0, 100, 100 };
+	SDL_FRect rocket_dstrect = { 0, 0, 100, 100 };
+
+	auto rocketSpawner = gameScene->AddGameObject("RocketSpawner", "Spawner");
+	rocketSpawner->AddComponent(new RocketSpawner(rocketSpawner, gameScene.get()));
+
 	SetActiveWorld1(false);
 }
 
-void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)())
+void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)(), void (*setCameraPosFunc)(Vector3))
 {
 	std::fstream f(GetSaveFile());
 	json save_data = json::parse(f);
@@ -67,6 +60,12 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSav
 	}
 
 	GenerateWorld1(gameScene);
+
+	auto player = gameScene->AddGameObject("Player", "Player");
+	player->AddComponent(new Movement(player));
+
+	auto camera = gameScene->AddGameObject("Camera", "Camera");
+	camera->AddComponent(new Camera(camera, player, &setCameraPosFunc);
 
 	switch(currWorld)
 	{

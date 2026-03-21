@@ -1,6 +1,8 @@
 #ifndef DG_ENGINE_STD_
 #define DG_ENGINE_STD_
 
+#include <fstream>
+#include <sstream>
 #include <vector>
 #include <memory>
 #include <iostream>
@@ -18,5 +20,7 @@ bool IsPointInsideRect(const Vector3& vec, const SDL_FRect& rect);
 bool IsPointInsideRect(const Vector3& vec, const SDL_Rect& rect);
 bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs);
 SDL_FRect MultRect(const SDL_FRect& rect, float mult);
+std::vector<std::vector<int>> GetMapFromCsv(const std::string& filepath);
+Vector3 GetCameraPos();
 
 #endif

@@ -24,11 +24,6 @@ static std::chrono::time_point<std::chrono::system_clock> last_iterate_point = s
 static Vector3 CameraPos;
 static int currSave = 0;
 
-Vector3 GetCameraPos()
-{
-	return CameraPos;
-}
-
 static void SetCameraPos(Vector3 pos)
 {
 	CameraPos = pos;
@@ -82,7 +77,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 
 	GenerateIntroScene(scenes[0]);
 	GenerateMenuScene(scenes[1], &SetCurrSave);
-	GenerateGameScene(scenes[2], &GetCurrSave);
+	GenerateGameScene(scenes[2], &GetCurrSave, &SetCameraPos);
 
 	ChangeScene(1);
 

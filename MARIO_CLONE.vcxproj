@@ -142,6 +142,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Config.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\GameScene.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Rocket.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\RocketSpawner.cpp" />
     <ClCompile Include="src\CustomScene\IntroScene\IntroScene.cpp" />
     <ClCompile Include="src\CustomScene\MenuScene\GrowBig.cpp" />
     <ClCompile Include="src\CustomScene\MenuScene\MenuScene.cpp" />
@@ -155,6 +157,7 @@
     <ClCompile Include="src\engine\Components\Rigidbody.cpp" />
     <ClCompile Include="src\engine\Components\SpriteRenderer.cpp" />
     <ClCompile Include="src\engine\Components\Tilemap.cpp" />
+    <ClCompile Include="src\engine\Components\TilemapCollider.cpp" />
     <ClCompile Include="src\engine\Components\Transform.cpp" />
     <ClCompile Include="src\engine\Components\UI\Button.cpp" />
     <ClCompile Include="src\engine\dg_engine_std.cpp" />
@@ -183,6 +186,8 @@
     <ClInclude Include="include\build_config\SDL_build_config_xbox.h" />
     <ClInclude Include="include\Config.h" />
     <ClInclude Include="include\CustomScene\GameScene\GameScene.h" />
+    <ClInclude Include="include\CustomScene\GameScene\Rocket.h" />
+    <ClInclude Include="include\CustomScene\GameScene\RocketSpawner.h" />
     <ClInclude Include="include\CustomScene\IntroScene\IntroScene.h" />
     <ClInclude Include="include\CustomScene\MenuScene\GrowBig.h" />
     <ClInclude Include="include\CustomScene\MenuScene\MenuScene.h" />
@@ -197,6 +202,7 @@
     <ClInclude Include="include\engine\Components\Rigidbody.h" />
     <ClInclude Include="include\engine\Components\SpriteRenderer.h" />
     <ClInclude Include="include\engine\Components\Tilemap.h" />
+    <ClInclude Include="include\engine\Components\TilemapCollider.h" />
     <ClInclude Include="include\engine\Components\Transform.h" />
     <ClInclude Include="include\engine\Components\UI\Button.h" />
     <ClInclude Include="include\engine\dg_engine_std.h" />

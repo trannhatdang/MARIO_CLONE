@@ -17,6 +17,10 @@ const std::string WORLD_IMG_NEW_SAVE_FILEPATH = ".\\data\\sprites\\new_save.png"
 const std::string SELECTOR_FILEPATH = ".\\data\\sprites\\selector.png";
 const std::string SAVE_FILE_FILEPATH = ".\\data\\save\\save.json";
 const std::string TILEMAP_FILEPATH = ".\\data\\sprites\\tilemap.png";
+const std::string ROCKET_FILEPATH = ".\\data\\sprites\\rocket.png";
+const std::string ROCKET2_FILEPATH = ".\\data\\sprites\\rocket2.png";
+const std::string ROCKET3_FILEPATH = ".\\data\\sprites\\rocket3.png";
+const std::string WORLD1_CSV_FILEPATH = ".\\data\\world\\world1.csv";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
 
 int GetWindowWidth(){
@@ -98,6 +102,26 @@ std::string GetTilemap()
 {
 	return TILEMAP_FILEPATH;
 }	
+
+std::string GetRocketSprite()
+{
+	return ROCKET_FILEPATH;
+}
+
+std::string GetRocket2Sprite()
+{
+	return ROCKET2_FILEPATH;
+}
+
+std::string GetRocket3Sprite()
+{
+	return ROCKET3_FILEPATH;
+}
+
+std::string GetWorld1Csv()
+{
+	return WORLD1_CSV_FILEPATH;
+}
 
 std::string GetFont()
 {

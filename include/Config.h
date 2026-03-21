@@ -17,6 +17,10 @@ std::string GetWorldImg(int index);
 std::string GetSelectorSprite();
 std::string GetSaveFile();
 std::string GetTilemap();
+std::string GetRocketSprite();
+std::string GetRocket2Sprite();
+std::string GetRocket3Sprite();
+std::string GetWorld1Csv();
 std::string GetFont();
 
 #endif

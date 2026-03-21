@@ -51,3 +51,31 @@ SDL_FRect MultRect(const SDL_FRect& rect, float mult)
 
 	return new_rect;
 }
+
+std::vector<std::vector<int>> GetMapFromCsv(const std::string& filepath)
+{
+	std::vector<std::vector<int>> ans;
+
+	std::fstream f(filepath);
+	std::string line;
+
+	while(std::getline(f, line))
+	{
+		std::stringstream lineStream(line);
+		std::string cell;
+		std::vector<int> vec;
+
+		while(std::getline(lineStream, cell, ','))
+		{
+			int x = 0;
+			if (cell.size() > 0)
+			{
+				x = std::stoi(cell);
+			}
+			vec.push_back(x);
+		}
+		ans.push_back(vec);
+	}
+
+	return ans;
+}

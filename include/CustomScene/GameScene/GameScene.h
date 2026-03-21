@@ -2,7 +2,7 @@
 #define GAME_SCENE_H_
 
 #include <fstream>
-#include "engine/scene.h"
+#include "engine/Scene.h"
 #include "engine/Components/SpriteRenderer.h"
 #include "engine/Components/Rigidbody.h"
 #include "engine/Components/Tilemap.h"
@@ -10,8 +10,9 @@
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
 #include "nlohmann/json.hpp"
+#include "RocketSpawner.h"
 #include "Config.h"
 
-void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)());
+void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)(), void (*setCameraPosFunc)(Vector3));
 
 #endif
