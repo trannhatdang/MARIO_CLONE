@@ -10,8 +10,11 @@
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
 #include "nlohmann/json.hpp"
+#include "Movement.h"
+#include "Camera.h"
 #include "RocketSpawner.h"
 #include "Config.h"
+#include "Gravity.h"
 
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)(), void (*setCameraPosFunc)(Vector3));
 

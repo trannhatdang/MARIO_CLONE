@@ -11,15 +11,18 @@ class Movement : public Component
 		Transform* m_tfs;
 		Rigidbody* m_rb;
 
+		float m_jumpForce = 1.0f;
+		bool m_onGround = false;
+
 		void moveLeft();
 		void moveRight();
-		void moveUp();
-		void moveDown();
+		void jump();
 	public:
-		Movement(GameObject* obj);
+		Movement(GameObject* obj, float jumpForce = 1.0f);
 		~Movement();
 		void OnIterate();
 		void OnEvent(SDL_Event* event);
+		void OnCollisionEnter(GameObject* obj);
 		std::unique_ptr<Component> copy();
 };
 

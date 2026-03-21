@@ -21,6 +21,7 @@ const std::string ROCKET_FILEPATH = ".\\data\\sprites\\rocket.png";
 const std::string ROCKET2_FILEPATH = ".\\data\\sprites\\rocket2.png";
 const std::string ROCKET3_FILEPATH = ".\\data\\sprites\\rocket3.png";
 const std::string WORLD1_CSV_FILEPATH = ".\\data\\world\\world1.csv";
+const std::string ROCKET_WORLD1_CSV_FILEPATH = ".\\data\\world\\rocketworld1.csv";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
 
 int GetWindowWidth(){
@@ -121,6 +122,11 @@ std::string GetRocket3Sprite()
 std::string GetWorld1Csv()
 {
 	return WORLD1_CSV_FILEPATH;
+}
+
+std::string GetRocketWorld1Csv()
+{
+	return ROCKET_WORLD1_CSV_FILEPATH;
 }
 
 std::string GetFont()

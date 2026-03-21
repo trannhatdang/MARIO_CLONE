@@ -31,9 +31,6 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
 	world1.push_back(tilemap);
 
-	SDL_FRect rocket_srcrect = { 0, 0, 100, 100 };
-	SDL_FRect rocket_dstrect = { 0, 0, 100, 100 };
-
 	auto rocketSpawner = gameScene->AddGameObject("RocketSpawner", "Spawner");
 	rocketSpawner->AddComponent(new RocketSpawner(rocketSpawner, gameScene.get()));
 
@@ -63,9 +60,11 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSav
 
 	auto player = gameScene->AddGameObject("Player", "Player");
 	player->AddComponent(new Movement(player));
+	player->AddComponent(new Rigidbody(player, false, 1, 10));
+	player->AddComponent(new Gravity(player));
 
 	auto camera = gameScene->AddGameObject("Camera", "Camera");
-	camera->AddComponent(new Camera(camera, player, &setCameraPosFunc);
+	camera->AddComponent(new Camera(camera, player, setCameraPosFunc));
 
 	switch(currWorld)
 	{

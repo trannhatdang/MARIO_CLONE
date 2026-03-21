@@ -79,3 +79,41 @@ std::vector<std::vector<int>> GetMapFromCsv(const std::string& filepath)
 
 	return ans;
 }
+
+std::vector<Vector3> GetPosFromCsv(const std::string& filepath)
+{
+	std::vector<Vector3> ans;
+
+	std::fstream f(filepath);
+	std::string line;
+
+	while(std::getline(f, line))
+	{
+		std::stringstream lineStream(line);
+		std::string cell;
+
+		std::getline(lineStream, cell, ',');
+		int x = 0;
+		if (cell.size() > 0)
+		{
+			x = std::stoi(cell);
+		}
+
+		std::getline(lineStream, cell, ',');
+		int y = 0;
+		if (cell.size() > 0)
+		{
+			x = std::stoi(cell);
+		}
+
+		std::getline(lineStream, cell, ',');
+		int z = 0;
+		if (cell.size() > 0)
+		{
+			x = std::stoi(cell);
+		}
+		ans.push_back({x, y, z});
+	}
+
+	return ans;
+}
