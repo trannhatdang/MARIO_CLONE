@@ -21,6 +21,12 @@ const std::string ROCKET_FILEPATH = ".\\data\\sprites\\rocket.png";
 const std::string ROCKET2_FILEPATH = ".\\data\\sprites\\rocket2.png";
 const std::string ROCKET3_FILEPATH = ".\\data\\sprites\\rocket3.png";
 const std::string WORLD1_CSV_FILEPATH = ".\\data\\world\\world1.csv";
+const std::string IDLE_FILEPATH = ".\\data\\sprites\\player_idle.png";
+const std::string RUNNING_FILEPATH = ".\\data\\sprites\\player_run.png";
+const std::string ACTION_FILEPATH = ".\\data\\sprites\\player_action.png";
+const std::string JUMPING_FILEPATH = ".\\data\\sprites\\player_jump.png";
+const std::string PLAYER_BULLET_FILEPATH = ".\\data\\sprites\\player_bullet.png";
+const std::string ARM_FILEPATH = ".\\data\\sprites\\player_arm.png";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\player.png";
 const std::string ENEMY_WORLD1_CSV_FILEPATH = ".\\data\\world\\enemy1.csv";
 const std::string SNIPER_FILEPATH = ".\\data\\sprites\\sniper.png";
@@ -124,6 +130,36 @@ std::string GetRocket3Sprite()
 std::string GetWorld1Csv()
 {
 	return WORLD1_CSV_FILEPATH;
+}
+
+std::string GetIdleSpriteSheet()
+{
+	return IDLE_FILEPATH;
+}
+
+std::string GetRunningSpriteSheet()
+{
+	return RUNNING_FILEPATH;
+}
+
+std::string GetActionSpriteSheet()
+{
+	return ACTION_FILEPATH;
+}
+
+std::string GetJumpingSpriteSheet()
+{
+	return JUMPING_FILEPATH;
+}
+
+std::string GetPlayerBulletSprite()
+{
+	return PLAYER_BULLET_FILEPATH;
+}
+
+std::string GetArmSpriteSheet()
+{
+	return ARM_FILEPATH;
 }
 
 std::string GetPlayerSpritesheet()

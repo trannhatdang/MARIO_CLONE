@@ -12,6 +12,10 @@ const int FLASHING_BLOCK_TILE = 5;
 const int ROCKET_SPAWNER = 0;
 const int SNIPER = 1;
 
+const int SHOOTING_ARM = 0;
+const int PUNCHING_ARM = 1;
+const int IDLE_ARM = 2;
+
 const int TILE_SIZE = 50;
 
 //int currSave = 0;
@@ -46,8 +50,65 @@ bool IsSniperIdle(GameObject* obj)
 	return !sniper->IsShooting();
 }
 
+bool IsIdle(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && !player->IsActing() && !player->IsRunning();
+}
+
+bool IsIdleActing(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsActing() && !player->IsRunning();
+}
+
+bool IsRunning(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && !player->IsActing() && player->IsRunning();
+}
+
+bool IsRunningActing(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsActing() && player->IsRunning();
+}
+
+bool IsJumping(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return !player->IsOnGround() && !player->IsActing();
+}
+
+bool IsJumpingActing(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return !player->IsOnGround() && player->IsActing();
+}
+
+bool IsPlayerShooting(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsShooting();
+}
+
+bool IsPlayerPunching(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsPunching();
+}
+
 void SetActiveWorld1(bool val)
 {
+
 }
 
 void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
@@ -77,7 +138,8 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 						sniper->GetTransform()->SetPosition({ TILE_SIZE * i, TILE_SIZE * j, 0 });
 						Animator* sniperAnim = static_cast<Animator*>(sniper->AddComponent(new Animator(sniper, renderer)));
 
-						sniperAnim->AddAnimation(nullptr, GetSniperSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 100, 100 }, 0, 1, &IsSniperShooting);
+						sniperAnim->AddAnimation(nullptr, GetSniperSpriteSheet(), { 0, 0, 50, 50 }, { 0, 0, 50, 50 }, 1, &IsSniperIdle, 2.0f);
+						sniperAnim->AddAnimation(nullptr, GetSniperSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsSniperShooting, 1.0f);
 					}
 
 					break;
@@ -125,15 +187,28 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	SDL_Renderer* renderer = gameScene->GetRenderer();
 
 	GenerateWorld1(gameScene);
-
 	auto player = gameScene->AddGameObject("Player", "Player");
-	player->AddComponent(new Player(player));
 
-	auto bodyAnim = player->AddComponent(new Animator(player, renderer));
-	auto armAnim = player->AddComponent(new Animator(player, renderer, { 0.5, 0.5, 0 }));
+	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
+	auto armAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
 
-	player->AddComponent(new Movement(player));
+	//AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, int scale, cond_func* cond)
+
+	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 2.0f);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
+	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.5f);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActing, 0.5f);
+	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumping, 1.0f);
+	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActing, 1.0f);
+
+	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * IDLE_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsIdle, 1.0f);
+	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * SHOOTING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerShooting, 1.0f);
+	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunching, 1.0f);
+
+	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player)));
 	player->AddComponent(new Rigidbody(player, false, 1, 10));
+
+	player->AddComponent(new Player(player, gameScene.get(), movementComp));
 	//player->AddComponent(new Gravity(player));
 
 	auto camera = gameScene->AddGameObject("Camera", "Camera");

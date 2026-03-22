@@ -21,17 +21,30 @@ void Animator::OnIterate()
 {
 	for(auto i = 0; i < m_anyNode->conds.size(); ++i)
 	{
+		if(!m_anyNode->conds[i])
+		{
+			continue;
+		}
+
 		if(m_anyNode->conds[i](this->gameObject))
 		{
 			m_currNode = m_anyNode->adj[i];
+			m_currNode->anim->m_timeSinceLastAnim = 0.0f;
 			return;
 		}
 	}
 
 	if(!m_currNode) return;
 
+	m_currNode->anim->m_timeSinceLastAnim += DGTime_deltaTime();
+
 	for(auto i = 0; i < m_currNode->conds.size(); ++i)
 	{
+		if(!m_currNode->conds[i])
+		{
+			continue;
+		}
+
 		if(m_currNode->conds[i](this->gameObject))
 		{
 			m_currNode = m_currNode->adj[i];
@@ -52,10 +65,10 @@ void Animator::OnDraw(SDL_Renderer* renderer)
 	}
 }
 
-AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, int scale, cond_func* cond)
+AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay)
 {
 	AnimationNode* node = new AnimationNode;
-	node->anim = std::make_unique<Animation>(m_renderer, filepath, srcrect, dstrect, num_frame, scale);
+	node->anim = std::make_unique<Animation>(m_renderer, filepath, srcrect, dstrect, num_frame, delay);
 
 	if(prevNode)
 	{
@@ -75,8 +88,7 @@ AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string
 
 AnimationNode* Animator::AddAnimation(AnimationNode* node)
 {
-	this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, node->anim->m_scale, nullptr);
-	return nullptr;
+	return this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, nullptr);
 }
 
 AnimationNode* Animator::CopyAnyNode(AnimationNode* node)

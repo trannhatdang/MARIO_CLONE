@@ -2,6 +2,7 @@
 #define ANIMATOR_H_
 
 #include "Component.h"
+#include "engine/dg_time.h"
 #include "../Animation.h"
 #include "../AnimationNode.h"
 
@@ -22,7 +23,7 @@ class Animator : public Component
 		void OnDraw(SDL_Renderer* renderer);
 		std::unique_ptr<Component> copy();
 
-		AnimationNode* AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, int scale, cond_func* cond);
+		AnimationNode* AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay);
 		AnimationNode* AddAnimation(AnimationNode* node);
 		AnimationNode* CopyAnyNode(AnimationNode* node);
 		AnimationNode* GetAnyNode();
