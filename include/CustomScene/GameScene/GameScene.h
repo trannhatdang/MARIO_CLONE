@@ -18,6 +18,7 @@
 #include "Gravity.h"
 #include "Sniper.h"
 #include "Player.h"
+#include "PlayerArm.h"
 
 void SetWorld(int val);
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3));

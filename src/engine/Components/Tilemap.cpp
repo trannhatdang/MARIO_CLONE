@@ -18,13 +18,14 @@ void Tilemap::OnIterate()
 
 void Tilemap::OnDraw(SDL_Renderer* renderer)
 {
+	Vector3 cameraPos = GetCameraPos();
 	for(auto i = 0; i < m_map.size(); ++i)
 	{
 		for(auto j = 0; j < m_map[i].size(); ++j)
 		{
 			SDL_Rect viewport;
-			viewport.x = j * m_width * m_scale;
-			viewport.y = i * m_height * m_scale;
+			viewport.x = j * m_width * m_scale - cameraPos.x;
+			viewport.y = i * m_height * m_scale - cameraPos.y;
 			viewport.w = m_width * m_scale;
 			viewport.h = m_height * m_scale;
 

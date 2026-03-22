@@ -145,6 +145,9 @@
     <ClCompile Include="src\CustomScene\GameScene\GameScene.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Gravity.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Movement.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Player.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerArm.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerBullet.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Rocket.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\RocketSpawner.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Sniper.cpp" />
@@ -193,6 +196,9 @@
     <ClInclude Include="include\CustomScene\GameScene\GameScene.h" />
     <ClInclude Include="include\CustomScene\GameScene\Gravity.h" />
     <ClInclude Include="include\CustomScene\GameScene\Movement.h" />
+    <ClInclude Include="include\CustomScene\GameScene\Player.h" />
+    <ClInclude Include="include\CustomScene\GameScene\PlayerArm.h" />
+    <ClInclude Include="include\CustomScene\GameScene\PlayerBullet.h" />
     <ClInclude Include="include\CustomScene\GameScene\Rocket.h" />
     <ClInclude Include="include\CustomScene\GameScene\RocketSpawner.h" />
     <ClInclude Include="include\CustomScene\GameScene\Sniper.h" />

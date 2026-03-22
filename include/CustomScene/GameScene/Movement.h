@@ -12,10 +12,13 @@ class Movement : public Component
 		Transform* m_tfs;
 		Rigidbody* m_rb;
 
-		float m_jumpForce = 1.0f;
+		float m_jumpForce = 30.0f;
 		float m_timeSinceLastMovement = 0.0f;
 		float m_movementDelay = 0.05f;
+		float m_speed = 10.0f;
 		bool m_onGround = false;
+		bool m_holdingLeft = false;
+		bool m_holdingRight = false;
 		bool m_isFacingLeft = false;
 		bool m_isRunning = false;
 
@@ -23,7 +26,7 @@ class Movement : public Component
 		void moveRight();
 		void jump();
 	public:
-		Movement(GameObject* obj, float jumpForce = 1.0f, float m_movementDelay = 0.05f);
+		Movement(GameObject* obj, float jumpForce = 30.0f, float m_movementDelay = 0.05f, float m_speed = 3.0f);
 		~Movement();
 		void OnIterate();
 		void OnEvent(SDL_Event* event);

@@ -15,10 +15,9 @@ const int SNIPER = 1;
 const int SHOOTING_ARM = 0;
 const int PUNCHING_ARM = 1;
 const int IDLE_ARM = 2;
+const int INVIS_ARM = 3;
 
 const int TILE_SIZE = 50;
-
-//int currSave = 0;
 
 static SDL_FRect tile_dstrect = { 0, 0, TILE_SIZE, TILE_SIZE };
 
@@ -158,8 +157,9 @@ void SpawnBoss1(const std::unique_ptr<Scene>& gameScene)
 void GenerateColliders1(const std::unique_ptr<Scene>& gameScene)
 {
 	auto groundCol = gameScene->AddGameObject("GroundCollider", "Collider");
-	groundCol->GetTransform()->SetPosition({ 50 * 7, 0, 0});
-	groundCol->AddComponent(new BoxCollider(groundCol, { 50 * 36, 50 * 4 }));
+	groundCol->GetTransform()->SetPosition({ 0, 50 * 10, 0});
+	groundCol->AddComponent(new BoxCollider(groundCol, { 12000, 50 * 4 }));
+	//groundCol->AddComponent(new Rigidbody(groundCol, INT_MAX));
 
 	//auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
 
@@ -168,8 +168,12 @@ void GenerateColliders1(const std::unique_ptr<Scene>& gameScene)
 void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 {
 	SDL_Renderer* renderer = gameScene->GetRenderer();
+	worlds.push_back(std::vector<GameObject*>());
 
 	std::vector<std::vector<int>> world1_map = GetMapFromCsv(GetWorld1Csv());
+
+	auto gameBackground = gameScene->AddGameObject("GameBackground", "Background");
+	gameBackground->AddComponent(new SpriteRenderer(gameBackground, renderer, GetGameBackground(), {0, 0, 0}, { 0, 0, 12000, 800 }, { 0, 0, 12000, 800 }));
 
 	auto tilemap = gameScene->AddGameObject("Tilemap", "Tilemap");
 	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
@@ -188,28 +192,34 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 
 	GenerateWorld1(gameScene);
 	auto player = gameScene->AddGameObject("Player", "Player");
+	player->GetTransform()->SetPosition( { 560, 315, 0 });
+
+	player->AddComponent(new Rigidbody(player, false, 1, 10));
+	player->AddComponent(new BoxCollider(player, { 50, 50 }));
 
 	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
-	auto armAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
-
-	//AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, int scale, cond_func* cond)
+	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 30.0f, 0.01f, 5.0f)));
 
 	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 2.0f);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
-	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.5f);
+	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.5f);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActing, 0.5f);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumping, 1.0f);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActing, 1.0f);
 
+	player->AddComponent(new Player(player, gameScene.get(), movementComp));
+	player->AddComponent(new Gravity(player, 0.01f));
+
+	auto arm = gameScene->AddGameObject("PlayerArm", "Player");
+	auto armAnim = static_cast<Animator*>(arm->AddComponent(new Animator(player, renderer)));
+
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * IDLE_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsIdle, 1.0f);
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * SHOOTING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerShooting, 1.0f);
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunching, 1.0f);
+	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsRunning, 1.0f);
+	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsJumping, 1.0f);
 
-	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player)));
-	player->AddComponent(new Rigidbody(player, false, 1, 10));
-
-	player->AddComponent(new Player(player, gameScene.get(), movementComp));
-	//player->AddComponent(new Gravity(player));
+	arm->AddComponent(new PlayerArm(arm, player));
 
 	auto camera = gameScene->AddGameObject("Camera", "Camera");
 	camera->AddComponent(new Camera(camera, player, setCameraPosFunc));

@@ -14,17 +14,16 @@ Animation::~Animation()
 
 void Animation::OnDraw(SDL_Renderer* renderer, SDL_Rect viewport)
 {
-	if(m_timeSinceLastAnim < m_delay)
+	m_timeSinceLastAnim = m_timeSinceLastAnim + DGTime_deltaTime();
+	if(m_timeSinceLastAnim >= m_delay)
 	{
-		return;
+		m_timeSinceLastAnim = 0.0f;
+		m_currFrame = (m_currFrame + 1) % m_num_frames;
 	};
 
-	m_timeSinceLastAnim = 0.0f;
-	m_currFrame = (m_currFrame + 1) % m_num_frames;
-
 	SDL_FRect srcrect;
-	srcrect.x = (float)(m_currFrame * m_srcrect.x);
-	srcrect.y = (float(m_srcrect.y));
+	srcrect.x = (float)(m_srcrect.x + m_currFrame * m_srcrect.w);
+	srcrect.y = (float)(m_srcrect.y);
 	srcrect.w = (float)m_srcrect.w;
 	srcrect.h = (float)m_srcrect.h;
 

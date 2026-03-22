@@ -13,6 +13,13 @@ PlayerBullet::~PlayerBullet()
 
 void PlayerBullet::OnIterate()
 {
+	Vector3 pos = m_tfs->GetPosition();
+
+	if(pos.x < -10000 || pos.x > 10000)
+	{
+		gameObject->SetActive(false);
+	}
+
 	if(!m_tfs)
 	{
 		return;
@@ -26,8 +33,6 @@ void PlayerBullet::OnIterate()
 	}
 
 	m_timeSinceLastMovement = 0.0f;
-
-	Vector3 pos = m_tfs->GetPosition();
 
 	m_tfs->SetPosition(pos + m_dir);
 }

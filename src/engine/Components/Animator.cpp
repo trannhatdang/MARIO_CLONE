@@ -29,7 +29,7 @@ void Animator::OnIterate()
 		if(m_anyNode->conds[i](this->gameObject))
 		{
 			m_currNode = m_anyNode->adj[i];
-			m_currNode->anim->m_timeSinceLastAnim = 0.0f;
+			//m_currNode->anim->m_timeSinceLastAnim = 0.0f;
 			return;
 		}
 	}
@@ -61,9 +61,9 @@ void Animator::OnDraw(SDL_Renderer* renderer)
 	{
 		int w = (int)m_currNode->anim->m_dstrect.w;
 		int h = (int)m_currNode->anim->m_dstrect.h;
-		m_currNode->anim->OnDraw(renderer, { pos.x + (int)(m_anchor.x * w), pos.y + (int)(m_anchor.y * h), w, h });
+		m_currNode->anim->OnDraw(renderer, { pos.x - (int)(m_anchor.x * w), pos.y - (int)(m_anchor.y * h), w, h });
 	}
-}
+}	
 
 AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay)
 {
@@ -88,7 +88,7 @@ AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string
 
 AnimationNode* Animator::AddAnimation(AnimationNode* node)
 {
-	return this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, nullptr);
+	return this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, nullptr, node->anim->m_delay);
 }
 
 AnimationNode* Animator::CopyAnyNode(AnimationNode* node)

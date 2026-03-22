@@ -38,10 +38,10 @@ void SpriteRenderer::OnDraw(SDL_Renderer* renderer)
 	Vector3 cameraPos = GetCameraPos();
 
 	viewport.x = std::min(std::max(pos.x - cameraPos.x, -10000), 10000);
-	viewport.x = viewport.x + m_dstrect.w * m_anchor.x;
+	viewport.x = viewport.x - m_dstrect.w * m_anchor.x;
 
 	viewport.y = std::min(std::max(pos.y - cameraPos.y, -10000), 10000);
-	viewport.y = viewport.y + m_dstrect.h * m_anchor.y;
+	viewport.y = viewport.y - m_dstrect.h * m_anchor.y;
 
 	viewport.w = m_dstrect.w;
 	viewport.h = m_dstrect.h;

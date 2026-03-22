@@ -42,6 +42,9 @@
     <ClCompile Include="src\CustomScene\GameScene\Gravity.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Movement.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Sniper.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Player.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerBullet.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerArm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -429,6 +432,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CustomScene\GameScene\Sniper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\PlayerBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\PlayerArm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

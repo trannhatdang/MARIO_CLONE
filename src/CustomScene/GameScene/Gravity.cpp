@@ -13,7 +13,7 @@ Gravity::~Gravity()
 
 void Gravity::OnIterate()
 {
-	m_rb->AddForce(Vector3(0, m_gravityScale, 0));
+	m_rb->AddForce({0, m_gravityScale, 0});
 }
 
 std::unique_ptr<Component> Gravity::copy()

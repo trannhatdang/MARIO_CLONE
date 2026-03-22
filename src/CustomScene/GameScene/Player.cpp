@@ -16,10 +16,13 @@ void Player::shoot()
 	{
 		return;
 	}
+	Vector3 cameraPos = GetCameraPos();
+	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
 
 	Vector3 dir = m_movement->IsFacingLeft() ? Vector3(-1, 0, 0) : Vector3(1, 0, 0);
 
 	auto newBullet = m_scene->AddGameObject("Bullet", "PlayerBullet");
+	newBullet->GetTransform()->SetPosition(playerPos - cameraPos);
 	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetPlayerBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	newBullet->AddComponent(new PlayerBullet(newBullet, dir, 0.01f));
 }
@@ -30,17 +33,19 @@ void Player::punch()
 	{
 		return;
 	}
+	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
 
-	Vector3 dir = m_movement->IsFacingLeft() ? Vector3(-1, 0, 0) : Vector3(1, 0, 0);
+	Vector3 pos = playerPos + (m_movement->IsFacingLeft() ? Vector3(-37, 25, 0) : Vector3(50, 25, 0));
 
 	auto newPunch = m_scene->AddGameObject("PlayerPunch", "Punch");
-	newPunch->GetTransform()->SetPosition( {} );
+	newPunch->GetTransform()->SetPosition(pos);
 	newPunch->AddComponent(new BoxCollider(newPunch, { 37, 17 }));
 }
 
 void Player::OnIterate()
 {
 	m_timeSinceLastAct += DGTime_deltaTime();
+
 	if(m_timeSinceLastAct >= m_actDelay)
 	{
 		m_isShooting = false;
@@ -70,7 +75,7 @@ void Player::OnEvent(SDL_Event* event)
 		{
 			punch();
 
-			m_isShooting = true;
+			m_isPunching = true;
 			m_timeSinceLastAct = 0.0f;
 		}
 	}
@@ -95,6 +100,11 @@ bool Player::IsOnGround() const
 bool Player::IsShooting() const
 {
 	return m_isShooting;
+}
+
+bool Player::IsPunching() const
+{
+	return m_isPunching;
 }
 
 bool Player::IsRunning() const

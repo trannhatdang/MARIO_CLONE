@@ -2,6 +2,7 @@
 #define ANIMATION_H_
 
 #include "dg_engine_std.h"
+#include "dg_time.h"
 
 class Animation
 {

@@ -156,17 +156,16 @@ void BoxCollider::DoCollision(GameObject* other_obj)
 	Rigidbody* other_rb = (Rigidbody*)other_obj->GetComponent("Rigidbody");
 	Vector3 pos = gameObject->GetTransform()->GetPosition();
 
-	if(other_rb->GetMass() >= rb->GetMass())
+	if(!other_rb || other_rb->GetMass() >= rb->GetMass())
 	{
 		auto dir_info = findDirectionToPushAway(pos);
 		rb->MovePosition(pos + dir_info);
-
-		if(gameObject->GetName() == "Ball")
-		{
-			std::cout << "dir_info: " << dir_info << std::endl;
-		}
 	}
-	if(other_rb == NULL) return;
+
+	if(!other_rb)
+	{
+		return;
+	}
 
 	//https://en.wikipedia.org/wiki/Elastic_collision
 	int mass = rb->GetMass();
