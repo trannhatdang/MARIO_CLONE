@@ -17,7 +17,9 @@
 #include "Config.h"
 #include "Gravity.h"
 #include "Sniper.h"
+#include "Player.h"
 
-void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)(), void (*setCameraPosFunc)(Vector3));
+void SetWorld(int val);
+void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3));
 
 #endif

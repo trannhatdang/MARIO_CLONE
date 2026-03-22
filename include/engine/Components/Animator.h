@@ -9,13 +9,14 @@ class Animator : public Component
 {
 	private:
 		SDL_Renderer* m_renderer;
+		Vector3f m_anchor;
 		AnimationNode* m_currNode = nullptr;
 		AnimationNode* m_startNode;
 		std::unique_ptr<AnimationNode> m_anyNode;
 
 		std::vector<std::unique_ptr<AnimationNode>> m_animations;
 	public:
-		Animator(GameObject* obj, SDL_Renderer* renderer);
+		Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor = { 0, 0, 0 });
 		void OnStart();
 		void OnIterate();
 		void OnDraw(SDL_Renderer* renderer);

@@ -3,6 +3,7 @@
 
 #include "engine/Components/Component.h"
 #include "engine/Components/SpriteRenderer.h"
+#include "engine/Components/BoxCollider.h"
 #include "engine/dg_time.h"
 #include "engine/Scene.h"
 #include "Config.h"

@@ -13,10 +13,14 @@ RocketSpawner::~RocketSpawner()
 void RocketSpawner::spawnRocket()
 {
 	Vector3 pos = gameObject->GetTransform()->GetPosition();
-	auto rocket = m_currScene->AddGameObject("Rocket", "Rocket");
-	rocket->AddComponent(new Rocket(rocket));
+	auto rocket = m_currScene->AddGameObject("Rocket", "Enemy");
 	rocket->GetTransform()->SetPosition(pos);
-	rocket->AddComponent(new SpriteRenderer(rocket, m_currScene->GetRenderer(), GetRocketSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
+	rocket->AddComponent(new Rocket(rocket));
+	rocket->AddComponent(new BoxCollider(rocket, { 25, 25 }, false));
+	rocket->AddComponent(new SpriteRenderer(rocket,
+				m_currScene->GetRenderer(),
+				GetRocketSprite(),
+				{ 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 }
 
 void RocketSpawner::OnIterate()

@@ -21,6 +21,7 @@ const std::string ROCKET_FILEPATH = ".\\data\\sprites\\rocket.png";
 const std::string ROCKET2_FILEPATH = ".\\data\\sprites\\rocket2.png";
 const std::string ROCKET3_FILEPATH = ".\\data\\sprites\\rocket3.png";
 const std::string WORLD1_CSV_FILEPATH = ".\\data\\world\\world1.csv";
+const std::string PLAYER_FILEPATH = ".\\data\\sprites\\player.png";
 const std::string ENEMY_WORLD1_CSV_FILEPATH = ".\\data\\world\\enemy1.csv";
 const std::string SNIPER_FILEPATH = ".\\data\\sprites\\sniper.png";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
@@ -123,6 +124,11 @@ std::string GetRocket3Sprite()
 std::string GetWorld1Csv()
 {
 	return WORLD1_CSV_FILEPATH;
+}
+
+std::string GetPlayerSpritesheet()
+{
+	return PLAYER_FILEPATH;
 }
 
 std::string GetEnemyWorld1Csv()

@@ -2,16 +2,18 @@
 
 using json = nlohmann::json;
 
-void (*setCurrSaveFunc)(int) = nullptr;
+void (*setCurrWorldFunc)(int) = nullptr;
 GrowBig* startGamePanelGrow;
 Scene* currScene;
 std::vector<GameObject*> gamePanel;
 
+int world1 = 1, world2 = 1;
+
 void ChangeToGameSceneSave1()
 {
-	if(setCurrSaveFunc)
+	if(setCurrWorldFunc)
 	{
-		setCurrSaveFunc(1);
+		setCurrWorldFunc(world1);
 
 	}
 
@@ -20,9 +22,9 @@ void ChangeToGameSceneSave1()
 
 void ChangeToGameSceneSave2()
 {
-	if(setCurrSaveFunc)
+	if(setCurrWorldFunc)
 	{
-		setCurrSaveFunc(2);
+		setCurrWorldFunc(world1);
 
 	}
 
@@ -66,7 +68,7 @@ void EnableStartGamePanelChildren()
 	}
 }
 
-void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrSaveFunc)(int))
+void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWorldFunc)(int))
 {
 	/*std::vector<std::vector<int>> world1_map = GetMapFromCsv(GetWorld1Csv());
 	for(int i = 0; i < world1_map.size(); ++i)
@@ -85,10 +87,10 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrSa
 	std::ifstream f(GetSaveFile());
 	json save_data = json::parse(f);
 
-	int world1 = save_data["save1"]["world"];
+	world1 = save_data["save1"]["world"];
 	std::string name1 = save_data["save1"]["name"];
 	std::string playtime1 = save_data["save1"]["playtime"];
-	int world2 = save_data["save2"]["world"];
+	world2 = save_data["save2"]["world"];
 	std::string name2 = save_data["save2"]["name"];
 	std::string playtime2 = save_data["save2"]["playtime"];
 

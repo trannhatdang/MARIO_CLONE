@@ -1,7 +1,7 @@
 #include "engine/Components/Tilemap.h"
 #include "engine/GameObject.h"
 
-Tilemap::Tilemap(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath, const std::vector<std::vector<int>>& map, int width, int height, double scale) : Component("Tilemap", obj), m_renderer(renderer), m_map(map), m_width(width), m_height(height), m_scale(scale)
+Tilemap::Tilemap(GameObject* obj, SDL_Renderer* renderer, const std::string& filepath, const std::vector<std::vector<int>>& map, int width, int height, double scale) : Component("Tilemap", obj), m_renderer(renderer), m_width(width), m_height(height), m_scale(scale), m_map(map)
 {
 	m_texture = CreateTextureFromPNG(renderer, filepath);
 }
@@ -41,6 +41,7 @@ void Tilemap::OnDraw(SDL_Renderer* renderer)
 			dstrect.h = m_height * m_scale;
 
 			DrawTexture(renderer, m_texture, viewport, srcrect, dstrect);
+
 		}
 	}
 }

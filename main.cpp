@@ -22,27 +22,21 @@ static std::chrono::milliseconds frametime = std::chrono::milliseconds(16);
 static std::chrono::time_point<std::chrono::system_clock> last_iterate_point = std::chrono::system_clock::now();
 
 static Vector3 CameraPos;
-static int currSave = 0;
 
 static void SetCameraPos(Vector3 pos)
 {
 	CameraPos = pos;
 }
 
+Vector3 GetCameraPos()
+{
+	return CameraPos;
+}
+
 static void ChangeScene(int index)
 {
 	currScene = scenes[index].get();
 	currScene->OnStart();
-}
-
-static void SetCurrSave(int index)
-{
-	currSave = index;
-}
-
-static int GetCurrSave()
-{
-	return currSave;
 }
 
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
@@ -76,8 +70,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 	scenes[2] = std::make_unique<Scene>("GameScene", &ChangeScene, renderer, window);
 
 	GenerateIntroScene(scenes[0]);
-	GenerateMenuScene(scenes[1], &SetCurrSave);
-	GenerateGameScene(scenes[2], &GetCurrSave, &SetCameraPos);
+	GenerateMenuScene(scenes[1], &SetWorld);
+	GenerateGameScene(scenes[2], &SetCameraPos);
 
 	ChangeScene(1);
 

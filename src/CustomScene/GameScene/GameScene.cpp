@@ -6,17 +6,31 @@ const int SKY_TILE = 0;
 const int GRASS_TILE = 1;
 const int GROUND_TILE = 2;
 const int BLOCK_TILE = 3;
+const int DESTRUCTABLE_BLOCK_TILE = 4;
+const int FLASHING_BLOCK_TILE = 5;
 
 const int ROCKET_SPAWNER = 0;
 const int SNIPER = 1;
 
 const int TILE_SIZE = 50;
 
-int currSave = 0;
+//int currSave = 0;
 
-SDL_FRect tile_dstrect = { 0, 0, TILE_SIZE, TILE_SIZE };
+static SDL_FRect tile_dstrect = { 0, 0, TILE_SIZE, TILE_SIZE };
 
-std::vector<GameObject*> world1;
+static std::vector<std::vector<GameObject*>> worlds;
+
+void SetWorld(int val)
+{
+	for(int i = 0; i < worlds.size(); ++i)
+	{
+		for(int j = 0; j < worlds[i].size(); ++j)
+		{
+			bool active = (i == val);
+			worlds[i][j]->SetActive(active);
+		}
+	}
+}
 
 bool IsSniperShooting(GameObject* obj)
 {
@@ -34,10 +48,6 @@ bool IsSniperIdle(GameObject* obj)
 
 void SetActiveWorld1(bool val)
 {
-	for(auto it : world1)
-	{
-		it->SetActive(val);
-	}
 }
 
 void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
@@ -62,7 +72,7 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 					break;
 				case SNIPER:
 					{
-						auto sniper = gameScene->AddGameObject("Sniper", "Sniper");
+						auto sniper = gameScene->AddGameObject("Sniper", "Enemy");
 						sniper->AddComponent(new Sniper(sniper, gameScene.get()));
 						sniper->GetTransform()->SetPosition({ TILE_SIZE * i, TILE_SIZE * j, 0 });
 						Animator* sniperAnim = static_cast<Animator*>(sniper->AddComponent(new Animator(sniper, renderer)));
@@ -83,6 +93,16 @@ void SpawnBoss1(const std::unique_ptr<Scene>& gameScene)
 
 }
 
+void GenerateColliders1(const std::unique_ptr<Scene>& gameScene)
+{
+	auto groundCol = gameScene->AddGameObject("GroundCollider", "Collider");
+	groundCol->GetTransform()->SetPosition({ 50 * 7, 0, 0});
+	groundCol->AddComponent(new BoxCollider(groundCol, { 50 * 36, 50 * 4 }));
+
+	//auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
+
+}
+
 void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 {
 	SDL_Renderer* renderer = gameScene->GetRenderer();
@@ -91,49 +111,31 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 
 	auto tilemap = gameScene->AddGameObject("Tilemap", "Tilemap");
 	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
-	world1.push_back(tilemap);
+	worlds[0].push_back(tilemap);
 
-	SpawnEnemy1(gameScene);
-	SpawnBoss1(gameScene);
+	GenerateColliders1(gameScene);
+	//SpawnEnemy1(gameScene);
+	//SpawnBoss1(gameScene);
 
-	SetActiveWorld1(false);
+	//SetActiveWorld1(false);
 }
 
-void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, int (*getCurrSaveFunc)(), void (*setCameraPosFunc)(Vector3))
+void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3))
 {
-	std::fstream f(GetSaveFile());
-	json save_data = json::parse(f);
-
-	int world1 = save_data["save1"]["world"];
-	int world2 = save_data["save2"]["world"];
-
-	int currWorld = 1;
-
-	if(currSave == 1)
-	{
-		currWorld = world1;
-	}
-	else
-	{
-		currWorld = world2;
-	}
+	SDL_Renderer* renderer = gameScene->GetRenderer();
 
 	GenerateWorld1(gameScene);
 
 	auto player = gameScene->AddGameObject("Player", "Player");
+	player->AddComponent(new Player(player));
+
+	auto bodyAnim = player->AddComponent(new Animator(player, renderer));
+	auto armAnim = player->AddComponent(new Animator(player, renderer, { 0.5, 0.5, 0 }));
+
 	player->AddComponent(new Movement(player));
 	player->AddComponent(new Rigidbody(player, false, 1, 10));
 	//player->AddComponent(new Gravity(player));
 
 	auto camera = gameScene->AddGameObject("Camera", "Camera");
 	camera->AddComponent(new Camera(camera, player, setCameraPosFunc));
-
-	switch(currWorld)
-	{
-		case 1:
-			SetActiveWorld1(true);
-			break;
-		default:
-			break;
-	}
 }

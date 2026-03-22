@@ -1,6 +1,6 @@
 #include "engine/Components/Animator.h"
 
-Animator::Animator(GameObject* obj, SDL_Renderer* renderer) : Component("Animator", obj), m_renderer(renderer)
+Animator::Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor) : Component("Animator", obj), m_renderer(renderer), m_anchor(anchor)
 {
 	m_anyNode = std::make_unique<AnimationNode>();
 }
@@ -43,7 +43,13 @@ void Animator::OnIterate()
 void Animator::OnDraw(SDL_Renderer* renderer)
 {
 	auto pos = gameObject->GetTransform()->GetPosition();
-	if(m_currNode) m_currNode->anim->OnDraw(renderer, { pos.x, pos.y, (int)m_currNode->anim->m_dstrect.w, (int)m_currNode->anim->m_dstrect.h });
+
+	if(m_currNode)
+	{
+		int w = (int)m_currNode->anim->m_dstrect.w;
+		int h = (int)m_currNode->anim->m_dstrect.h;
+		m_currNode->anim->OnDraw(renderer, { pos.x + (int)(m_anchor.x * w), pos.y + (int)(m_anchor.y * h), w, h });
+	}
 }
 
 AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, int scale, cond_func* cond)

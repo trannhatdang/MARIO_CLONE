@@ -21,6 +21,6 @@ void ChangeToGameSceneSave2();
 void CloseStartGamePanel();
 void OpenStartGamePanel();
 void EnableStartGamePanelChildren();
-void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrSaveFunc)(int));
+void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWorldFunc)(int));
 
 #endif

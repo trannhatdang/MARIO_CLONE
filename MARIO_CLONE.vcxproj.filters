@@ -38,6 +38,10 @@
     <ClCompile Include="src\CustomScene\GameScene\Rocket.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\RocketSpawner.cpp" />
     <ClCompile Include="src\engine\Components\TilemapCollider.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Camera.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Gravity.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Movement.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Sniper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -413,6 +417,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\engine\Components\TilemapCollider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Gravity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Movement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Sniper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
