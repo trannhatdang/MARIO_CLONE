@@ -16,6 +16,7 @@ const int BOX_POS_EVENT = SDL_RegisterEvents(1);
 
 SDL_Texture* CreateTextureFromPNG(SDL_Renderer* renderer, const std::string& filepath);
 void DrawTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport, SDL_FRect srcrect, SDL_FRect dstrect);
+void DrawTextureFlipped(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport, SDL_FRect srcrect, SDL_FRect dstrect, SDL_FlipMode flipMode);
 bool IsPointInsideRect(const Vector3& vec, const SDL_FRect& rect);
 bool IsPointInsideRect(const Vector3& vec, const SDL_Rect& rect);
 bool CompareRect(const SDL_FRect& lhs, const SDL_FRect& rhs);

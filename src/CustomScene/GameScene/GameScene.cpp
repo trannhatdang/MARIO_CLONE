@@ -53,56 +53,112 @@ bool IsIdle(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && !player->IsActing() && !player->IsRunning();
+	return player->IsOnGround() && !player->IsActing() && !player->IsRunning() && !player->IsFacingLeft();
+}
+
+bool IsIdleLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && !player->IsActing() && !player->IsRunning() && player->IsFacingLeft();
 }
 
 bool IsIdleActing(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && player->IsActing() && !player->IsRunning();
+	return player->IsOnGround() && player->IsActing() && !player->IsRunning() && !player->IsFacingLeft();
+}
+
+bool IsIdleActingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsActing() && !player->IsRunning() && player->IsFacingLeft();
 }
 
 bool IsRunning(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && !player->IsActing() && player->IsRunning();
+	return player->IsOnGround() && !player->IsActing() && player->IsRunning() && !player->IsFacingLeft();
+}
+
+bool IsRunningLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && !player->IsActing() && player->IsRunning() && player->IsFacingLeft();
 }
 
 bool IsRunningActing(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && player->IsActing() && player->IsRunning();
+	return player->IsOnGround() && player->IsActing() && player->IsRunning() && !player->IsFacingLeft();
+}
+
+bool IsRunningActingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsActing() && player->IsRunning() && player->IsFacingLeft();
 }
 
 bool IsJumping(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return !player->IsOnGround() && !player->IsActing();
+	return !player->IsOnGround() && !player->IsActing() && !player->IsFacingLeft();
+}
+
+bool IsJumpingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return !player->IsOnGround() && !player->IsActing() && player->IsFacingLeft();
 }
 
 bool IsJumpingActing(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return !player->IsOnGround() && player->IsActing();
+	return !player->IsOnGround() && player->IsActing() && !player->IsFacingLeft();
+}
+
+bool IsJumpingActingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return !player->IsOnGround() && player->IsActing() && player->IsFacingLeft();
 }
 
 bool IsPlayerShooting(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && player->IsShooting();
+	return player->IsOnGround() && player->IsShooting() && !player->IsFacingLeft();
+}
+
+bool IsPlayerShootingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsShooting() && player->IsFacingLeft();
 }
 
 bool IsPlayerPunching(GameObject* obj)
 {
 	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
 
-	return player->IsOnGround() && player->IsPunching();
+	return player->IsOnGround() && player->IsPunching() && !player->IsFacingLeft();
+}
+
+bool IsPlayerPunchingLeft(GameObject* obj)
+{
+	Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+
+	return player->IsOnGround() && player->IsPunching() && player->IsFacingLeft();
 }
 
 void SetActiveWorld1(bool val)
@@ -154,15 +210,31 @@ void SpawnBoss1(const std::unique_ptr<Scene>& gameScene)
 
 }
 
-void GenerateColliders1(const std::unique_ptr<Scene>& gameScene)
+void GenerateColliders1(const std::unique_ptr<Scene>& gameScene, const std::vector<std::vector<int>>& map)
 {
 	auto groundCol = gameScene->AddGameObject("GroundCollider", "Collider");
 	groundCol->GetTransform()->SetPosition({ 0, 50 * 10, 0});
 	groundCol->AddComponent(new BoxCollider(groundCol, { 12000, 50 * 4 }));
 	//groundCol->AddComponent(new Rigidbody(groundCol, INT_MAX));
 
-	//auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
-
+	auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
+	penisBaseCol->GetTransform()->SetPosition({ 350, 450, 0 });
+	penisBaseCol->AddComponent(new SpriteRenderer(penisBaseCol, gameScene->GetRenderer(), GetTilemap(), { 0, 0, 0 }, { 300, 0, 100, 100 }, { 0, 0, 50, 50 }));
+	penisBaseCol->AddComponent(new BoxCollider(penisBaseCol, { 50, 50 }));
+	
+	// for(int i = 0; i < map.size(); ++i)
+	// {
+	// 	for(int j = 0; j < map[i].size(); ++j)
+	// 	{
+	// 		if(map[i][j] <= 2) continue;
+	//
+	// 		auto col = gameScene->AddGameObject("Collider", "Collider");
+	// 		Vector3 pos = { 50 * j, 50 * i, 0 };
+	// 		// std::cout << pos << std::endl;
+	// 		col->GetTransform()->SetPosition({ 50 * j, 50 * i, 0 });
+	// 		col->AddComponent(new BoxCollider(col, { 50, 50 }));
+	// 	}
+	// }
 }
 
 void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
@@ -179,7 +251,7 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 	tilemap->AddComponent(new Tilemap(tilemap, renderer, GetTilemap(), world1_map, 100, 100, 0.5));
 	worlds[0].push_back(tilemap);
 
-	GenerateColliders1(gameScene);
+	GenerateColliders1(gameScene, world1_map);
 	//SpawnEnemy1(gameScene);
 	//SpawnBoss1(gameScene);
 
@@ -198,7 +270,7 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	player->AddComponent(new BoxCollider(player, { 50, 50 }));
 
 	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
-	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 30.0f, 0.01f, 5.0f)));
+	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 50.0f, 0.005f, 5.0f)));
 
 	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 2.0f);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
@@ -207,8 +279,15 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumping, 1.0f);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActing, 1.0f);
 
+	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdleLeft, 2.0f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningLeft, 0.5f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActingLeft, 0.5f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumpingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+
 	player->AddComponent(new Player(player, gameScene.get(), movementComp));
-	player->AddComponent(new Gravity(player, 0.01f));
+	player->AddComponent(new Gravity(player, 0.1f));
 
 	auto arm = gameScene->AddGameObject("PlayerArm", "Player");
 	auto armAnim = static_cast<Animator*>(arm->AddComponent(new Animator(player, renderer)));
@@ -218,6 +297,12 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunching, 1.0f);
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsRunning, 1.0f);
 	armAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsJumping, 1.0f);
+
+	armAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * IDLE_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsIdleLeft, 1.0f);
+	armAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * SHOOTING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerShootingLeft, 1.0f);
+	armAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunchingLeft, 1.0f);
+	armAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsRunningLeft, 1.0f);
+	armAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsJumpingLeft, 1.0f);
 
 	arm->AddComponent(new PlayerArm(arm, player));
 

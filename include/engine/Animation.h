@@ -17,8 +17,10 @@ class Animation
 		float m_delay = 0.05f;
 		int m_currFrame = 0;
 		int m_num_frames;
+
+		SDL_FlipMode m_flipMode = SDL_FLIP_NONE;
 	public:
-		Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, float delay = 0.05f);
+		Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, float delay = 0.05f, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 		~Animation();
 		void OnDraw(SDL_Renderer* renderer, SDL_Rect viewport);
 

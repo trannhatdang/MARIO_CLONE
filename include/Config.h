@@ -25,6 +25,7 @@ std::string GetIdleSpriteSheet();
 std::string GetRunningSpriteSheet();
 std::string GetActionSpriteSheet();
 std::string GetArmSpriteSheet();
+std::string GetFlippedArmSpriteSheet();
 std::string GetJumpingSpriteSheet();
 std::string GetPlayerBulletSprite();
 std::string GetEnemyWorld1Csv();

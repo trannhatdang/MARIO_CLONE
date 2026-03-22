@@ -65,10 +65,10 @@ void Animator::OnDraw(SDL_Renderer* renderer)
 	}
 }	
 
-AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay)
+AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay, SDL_FlipMode flipMode)
 {
 	AnimationNode* node = new AnimationNode;
-	node->anim = std::make_unique<Animation>(m_renderer, filepath, srcrect, dstrect, num_frame, delay);
+	node->anim = std::make_unique<Animation>(m_renderer, filepath, srcrect, dstrect, num_frame, delay, flipMode);
 
 	if(prevNode)
 	{
@@ -88,7 +88,7 @@ AnimationNode* Animator::AddAnimation(AnimationNode* prevNode, const std::string
 
 AnimationNode* Animator::AddAnimation(AnimationNode* node)
 {
-	return this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, nullptr, node->anim->m_delay);
+	return this->AddAnimation(nullptr, node->anim->m_filepath, node->anim->m_srcrect, node->anim->m_dstrect, node->anim->m_num_frames, nullptr, node->anim->m_delay, node->anim->m_flipMode);
 }
 
 AnimationNode* Animator::CopyAnyNode(AnimationNode* node)

@@ -26,6 +26,13 @@ void DrawTexture(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport
 	SDL_SetRenderViewport(renderer, NULL);
 }
 
+void DrawTextureFlipped(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect viewport, SDL_FRect srcrect, SDL_FRect dstrect, SDL_FlipMode flipMode)
+{
+	SDL_SetRenderViewport(renderer, &viewport);
+	SDL_RenderTextureRotated(renderer, texture, &srcrect, &dstrect, 0, NULL, flipMode);
+	SDL_SetRenderViewport(renderer, NULL);
+}
+
 bool IsPointInsideRect(const Vector3& vec, const SDL_FRect& rect)
 {
 	return vec.x >= rect.x && vec.y >= rect.y && vec.x <= (rect.x + rect.w) && vec.y <= (rect.y + rect.h);

@@ -18,17 +18,21 @@ void Player::shoot()
 	}
 	Vector3 cameraPos = GetCameraPos();
 	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
+	playerPos = playerPos + cameraPos;
+	playerPos.y += 25;
+	playerPos.x += m_movement->IsFacingLeft() ? -25 : 25 ;
 
 	Vector3 dir = m_movement->IsFacingLeft() ? Vector3(-1, 0, 0) : Vector3(1, 0, 0);
 
 	auto newBullet = m_scene->AddGameObject("Bullet", "PlayerBullet");
-	newBullet->GetTransform()->SetPosition(playerPos - cameraPos);
+	newBullet->GetTransform()->SetPosition(playerPos);
 	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetPlayerBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	newBullet->AddComponent(new PlayerBullet(newBullet, dir, 0.01f));
 }
 
 void Player::punch()
 {
+	//static_cast<Rigidbody*>(gameObject->GetComponent("Rigidbody"))->AddForce({1, 0, 0});
 	if(!m_scene)
 	{
 		return;
@@ -44,6 +48,9 @@ void Player::punch()
 
 void Player::OnIterate()
 {
+	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
+	//std::cout << "player pos: " << playerPos << std::endl;
+
 	m_timeSinceLastAct += DGTime_deltaTime();
 
 	if(m_timeSinceLastAct >= m_actDelay)

@@ -1,4 +1,5 @@
 #include "engine/Components/Transform.h"
+#include "engine/GameObject.h"
 
 Transform::Transform(GameObject* gameObject, const Vector3& pos, const Vector3& rot) : Component("Transform", gameObject), m_ogPos(pos), m_pos(pos), m_rot(rot)
 {
@@ -31,6 +32,11 @@ Vector3 Transform::GetOGPosition() const
 
 Vector3 Transform::GetPosition() const
 {
+	Vector3 cameraPos = GetCameraPos();
+	Vector3 ans = m_pos;
+	ans.x = ans.x - cameraPos.x;
+	ans.x = ans.y - cameraPos.y;
+
 	return m_pos;
 }
 

@@ -2,6 +2,7 @@
 #define B_COLLIDER_H_
 
 #include "engine/Components/Component.h"
+#include "engine/main.h"
 #include <algorithm>
 #include <unordered_set>
 

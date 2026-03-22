@@ -15,12 +15,15 @@ void Camera::moveLeft()
 {
 	Vector3 camPos = GetCameraPos();
 	(*m_setCameraPosFunc)(camPos + Vector3(-1, 0, 0));
+
+	std::cout << "camera moving left" << std::endl;
 }
 
 void Camera::moveRight()
 {
 	Vector3 camPos = GetCameraPos();
 	(*m_setCameraPosFunc)(camPos + Vector3(1, 0, 0));
+	std::cout << "camera moving right" << std::endl;
 }
 
 void Camera::OnIterate()

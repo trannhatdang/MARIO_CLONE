@@ -1,6 +1,6 @@
 #include "engine/Animation.h"
 
-Animation::Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, float delay) : m_srcrect(srcrect), m_dstrect(dstrect), m_filepath(filepath), m_delay(delay), m_num_frames(num_frames)
+Animation::Animation(SDL_Renderer* renderer, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frames, float delay, SDL_FlipMode flipMode) : m_srcrect(srcrect), m_dstrect(dstrect), m_filepath(filepath), m_delay(delay), m_num_frames(num_frames), m_flipMode(flipMode)
 {
 	m_texture = CreateTextureFromPNG(renderer, filepath);
 	m_currFrame = 0;
@@ -27,7 +27,7 @@ void Animation::OnDraw(SDL_Renderer* renderer, SDL_Rect viewport)
 	srcrect.w = (float)m_srcrect.w;
 	srcrect.h = (float)m_srcrect.h;
 
-	DrawTexture(renderer, m_texture, viewport, srcrect, m_dstrect);
+	DrawTextureFlipped(renderer, m_texture, viewport, srcrect, m_dstrect, m_flipMode);
 }
 
 std::string Animation::GetFilepath() const

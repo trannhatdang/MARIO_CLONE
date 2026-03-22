@@ -123,8 +123,9 @@ void BoxCollider::OnDraw(SDL_Renderer* renderer)
 	if(!m_debug) return;
 
 	auto pos = gameObject->GetTransform()->GetPosition();
+	//auto cameraPos = GetCameraPos();
 
-	SDL_FRect rect = {(float)pos.x, (float)pos.y, (float)m_offset.w, (float)m_offset.h};
+	SDL_FRect rect = {(float)(pos.x), (float)(pos.y), (float)m_offset.w, (float)m_offset.h};
 
 	if(!SDL_RenderRect(renderer, &rect))
 	{

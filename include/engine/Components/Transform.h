@@ -3,6 +3,7 @@
 
 #include "engine/dg_engine_std.h"
 #include "engine/components/component.h"
+#include "engine/main.h"
 
 class Transform : public Component
 {

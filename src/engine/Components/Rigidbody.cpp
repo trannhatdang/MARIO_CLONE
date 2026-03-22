@@ -99,6 +99,7 @@ void Rigidbody::MovePosition(const Vector3& pos, const Vector3& dir)
 void Rigidbody::MovePosition(const Vector3& pos)
 {
 	BoxCollider* coll = (BoxCollider*)gameObject->GetComponent("BoxCollider");
+
 	if(coll && coll->CheckCollision(pos))
 	{
 		return;

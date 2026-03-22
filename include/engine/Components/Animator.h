@@ -23,7 +23,7 @@ class Animator : public Component
 		void OnDraw(SDL_Renderer* renderer);
 		std::unique_ptr<Component> copy();
 
-		AnimationNode* AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay);
+		AnimationNode* AddAnimation(AnimationNode* prevNode, const std::string& filepath, SDL_FRect srcrect, SDL_FRect dstrect, int num_frame, cond_func* cond, float delay, SDL_FlipMode flipMode = SDL_FLIP_NONE);
 		AnimationNode* AddAnimation(AnimationNode* node);
 		AnimationNode* CopyAnyNode(AnimationNode* node);
 		AnimationNode* GetAnyNode();
