@@ -1,13 +1,13 @@
-#ifndef SUPER_PUNCH_H_
-#define SUPER_PUNCH_H_
+#ifndef PUNCHABLE_BLOCK_H_
+#define PUNCHABLE_BLOCK_H_
 
 #include "engine/Components/Component.h"
 
-class SuperPunch : public Component
+class PunchableBlock : public Component
 {
 	public:
-		SuperPunch(GameObject*);
-		~SuperPunch();
+		PunchableBlock(GameObject*);
+		~PunchableBlock();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);
 		std::unique_ptr<Component> copy();

@@ -32,6 +32,8 @@ std::string GetSniperBulletSprite();
 std::string GetEnemyWorld1Csv();
 std::string GetSniperSpriteSheet();
 std::string GetGameBackground();
+std::string GetStarSprite();
+std::string GetSuperPunchSprite();
 std::string GetFont();
 
 #endif

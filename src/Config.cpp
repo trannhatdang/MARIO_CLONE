@@ -33,6 +33,8 @@ const std::string PLAYER_FILEPATH = ".\\data\\sprites\\player.png";
 const std::string ENEMY_WORLD1_CSV_FILEPATH = ".\\data\\world\\enemy1.csv";
 const std::string SNIPER_FILEPATH = ".\\data\\sprites\\sniper.png";
 const std::string GAMEBACKGROUND_FILEPATH = ".\\data\\sprites\\game_background.png";
+const std::string STAR_FILEPATH = ".\\data\\sprites\\star.png";
+const std::string SUPER_PUNCH_FILEPATH = ".\\data\\sprites\\super_punch.png";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
 
 int GetWindowWidth(){
@@ -193,6 +195,16 @@ std::string GetSniperSpriteSheet()
 std::string GetGameBackground()
 {
 	return GAMEBACKGROUND_FILEPATH;
+}
+
+std::string GetStarSprite()
+{
+	return STAR_FILEPATH;
+}
+
+std::string GetSuperPunchSprite()
+{
+	return SUPER_PUNCH_FILEPATH;
 }
 
 std::string GetFont()
