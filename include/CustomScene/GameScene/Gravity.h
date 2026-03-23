@@ -14,6 +14,7 @@ class Gravity : public Component
 		Gravity(GameObject* obj, float gravityScale = 1.0f);
 		~Gravity();
 		void OnIterate();
+		void OnFixedIterate();
 		std::unique_ptr<Component> copy();
 };
 

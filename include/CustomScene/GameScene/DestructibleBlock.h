@@ -8,16 +8,18 @@
 #include "Star.h"
 #include "SuperPunch.h"
 #include "Config.h"
+#include "PlayerInventory.h"
 
 class DestructibleBlock : public Component
 {
 	private:
 		Scene* m_scene;
+		PlayerInventory* m_inven;
 		SDL_Renderer* m_renderer;
 		bool m_hasItems = false;
 		bool m_star = false;
 	public:
-		DestructibleBlock(GameObject*, Scene*, SDL_Renderer*, bool, bool);
+		DestructibleBlock(GameObject*, Scene*, SDL_Renderer*, PlayerInventory*, bool, bool);
 		~DestructibleBlock();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);

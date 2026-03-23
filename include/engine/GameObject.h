@@ -36,6 +36,7 @@ class GameObject
 		Component* CopyComponent(const std::unique_ptr<Component>& component);
 
 		void SetActive(bool val);
+		bool GetEnabled() const;
 };
 
 #endif

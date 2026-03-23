@@ -147,6 +147,11 @@ Component* GameObject::CopyComponent(const std::unique_ptr<Component>& component
 	return nullptr;
 }
 
+bool GameObject::GetEnabled() const
+{
+	return m_enabled;
+}
+
 void GameObject::SetActive(bool val)
 {
 	m_enabled = val;

@@ -24,6 +24,7 @@ void Sniper::shoot()
 	newBullet->GetTransform()->SetPosition(gameObject->GetTransform()->GetPosition());
 	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetSniperBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	newBullet->AddComponent(new SniperBullet(newBullet, {-1, 0, 0} , 0.01f));
+	newBullet->AddComponent(new BoxCollider(newBullet, { 25, 25 }, true, true));
 }
 
 void Sniper::OnIterate()

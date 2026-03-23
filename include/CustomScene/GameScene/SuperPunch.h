@@ -10,6 +10,7 @@ class SuperPunch : public Component
 		~SuperPunch();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);
+		void OnTriggerEnter(GameObject* other);
 		std::unique_ptr<Component> copy();
 };
 

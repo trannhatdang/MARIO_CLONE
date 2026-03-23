@@ -16,10 +16,12 @@ class Boss : public Component
 		Scene* m_scene;
 		PlayerInventory* m_inven;
 
-		int m_hp = 20;
+		int m_hp = 10000;
 
 		int m_left;
 		int m_right;
+		int m_up = 0;
+		int m_down = 560;
 
 		float m_timeSinceLastShooting = 0.0f;
 		float m_shootingTimeDelay = 5.0f;
@@ -27,7 +29,7 @@ class Boss : public Component
 		float m_shootingTime = 2.5f;
 
 		float m_timeSinceLastShot = 0.0f;
-		float m_shotDelay = 0.25f;
+		float m_shotDelay = 1.0f;
 
 		bool m_shooting = false;
 		bool m_movingLeft = false;
@@ -38,6 +40,7 @@ class Boss : public Component
 		~Boss();
 		void OnIterate();
 		std::unique_ptr<Component> copy();
+		void OnCollisionEnter(GameObject* obj);
 };
 
 #endif

@@ -34,6 +34,7 @@ class Player : public Component
 		void OnIterate();
 		void OnEvent(SDL_Event* event);
 		void OnCollisionEnter(GameObject* other);
+		void OnTriggerEnter(GameObject* other);
 		std::unique_ptr<Component> copy();
 
 		bool IsFacingLeft() const;

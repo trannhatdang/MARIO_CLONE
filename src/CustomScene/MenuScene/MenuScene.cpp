@@ -141,13 +141,21 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	selector_dstrect.h = 40;
 
 	auto startButton = menuScene->AddGameObject("StartButton", "Button");
-	startButton->GetTransform()->SetPosition({ 560, 500, 0 });
+	startButton->GetTransform()->SetPosition({ 360, 500, 0 });
 	startButton->AddComponent(new SpriteRenderer(startButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
 	startButton->AddComponent(new Button(startButton, &OpenStartGamePanel));
 
 	auto startFont = menuScene->AddGameObject("StartFont", "Font");
-	startFont->GetTransform()->SetPosition({ 500, 480, 0});
+	startFont->GetTransform()->SetPosition({ 300, 480, 0});
 	startFont->AddComponent(new Font(startFont, renderer, GetFont(), "Start"));
+
+	auto optionButton = menuScene->AddGameObject("StartButton", "Button");
+	optionButton->GetTransform()->SetPosition({ 660, 500, 0 });
+	optionButton->AddComponent(new SpriteRenderer(optionButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+
+	auto optionFont = menuScene->AddGameObject("optionFont", "Font");
+	optionFont->GetTransform()->SetPosition({ 600, 480, 0});
+	optionFont->AddComponent(new Font(optionFont, renderer, GetFont(), "Options"));
 
 	auto menuSelector = menuScene->AddGameObject("MenuSelector", "Selector");
 	menuSelector->AddComponent(new SpriteRenderer(menuSelector, renderer, GetSelectorSprite(), { 0, 0, 0 }, selector_srcrect, selector_dstrect));

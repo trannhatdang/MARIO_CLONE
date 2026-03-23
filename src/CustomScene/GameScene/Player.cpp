@@ -41,7 +41,7 @@ void Player::punch()
 
 	Vector3 pos = playerPos + (m_movement->IsFacingLeft() ? Vector3(-37, 25, 0) : Vector3(50, 25, 0));
 
-	auto newPunch = m_scene->AddGameObject("PlayerPunch", m_inven->HasSuperPunch() ? "SuperPunch" : "Punch");
+	auto newPunch = m_scene->AddGameObject("PlayerPunch", m_inven->HasSuperPunch() ? "PlayerSuperPunch" : "Punch");
 	newPunch->GetTransform()->SetPosition(pos);
 	newPunch->AddComponent(new BoxCollider(newPunch, { 37, 17 }));
 	newPunch->AddComponent(new PlayerPunch(newPunch));
@@ -92,6 +92,11 @@ void Player::OnEvent(SDL_Event* event)
 
 void Player::OnCollisionEnter(GameObject* other)
 {
+}
+
+void Player::OnTriggerEnter(GameObject* other)
+{
+	std::cout << "hi" << std::endl;
 	if(other->GetTag() == "Star")
 	{
 		m_inven->AddPoints(10);

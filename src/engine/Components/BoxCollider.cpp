@@ -217,6 +217,11 @@ void BoxCollider::Collide(GameObject* other_obj)
 
 	auto other_col = static_cast<BoxCollider*>(other_obj->GetComponent("BoxCollider"));
 
+	if(!gameObject->GetEnabled() || !other_col->gameObject->GetEnabled())
+	{
+		return;
+	}
+
 	if(m_trigger || other_col->m_trigger)
 	{
 		gameObject->OnTriggerEnter(other_obj);

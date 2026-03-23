@@ -13,6 +13,10 @@ Gravity::~Gravity()
 
 void Gravity::OnIterate()
 {
+}
+
+void Gravity::OnFixedIterate()
+{
 	m_rb->AddForce({0, m_gravityScale, 0});
 }
 

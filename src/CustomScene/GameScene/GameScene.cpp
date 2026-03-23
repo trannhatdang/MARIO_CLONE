@@ -212,10 +212,10 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 void SpawnBoss1(const std::unique_ptr<Scene>& gameScene)
 {
 	auto boss = gameScene->AddGameObject("Boss", "Boss");
-	boss->GetTransform()->SetPosition({ 1000, 400, 0 });
+	boss->GetTransform()->SetPosition({ 500, 400, 0 });
 	boss->AddComponent(new SpriteRenderer(boss, gameScene->GetRenderer(), GetBossSprite(), { 0, 0, 0 }, { 0, 0, 160, 240 }, {0, 0, 80, 120 }));
 	boss->AddComponent(new BoxCollider(boss, { 80, 120 }, false, true));
-	boss->AddComponent(new Boss(boss, gameScene.get(), playerInvenComp, 1800, 2200));
+	boss->AddComponent(new Boss(boss, gameScene.get(), playerInvenComp, 0, 1120));
 }
 
 void GenerateBlocks1(const std::unique_ptr<Scene>& gameScene, const std::vector<std::vector<int>>& map)
@@ -230,7 +230,7 @@ void GenerateBlocks1(const std::unique_ptr<Scene>& gameScene, const std::vector<
 				auto dest_block = gameScene->AddGameObject("DestructibleBlock", "DestructibleBlock");
 				dest_block->GetTransform()->SetPosition({ 50 * j, 50 * i, 0 });
 				dest_block->AddComponent(new BoxCollider(dest_block, { 50, 50 }, false, true));
-				dest_block->AddComponent(new DestructibleBlock(dest_block, gameScene.get(), renderer, true, rand() % 2 == 0));
+				dest_block->AddComponent(new DestructibleBlock(dest_block, gameScene.get(), renderer, playerInvenComp, true, rand() % 2 == 0));
 				dest_block->AddComponent(new SpriteRenderer(dest_block, renderer, GetTilemap(), { 0, 0, 0 }, { 400, 0, 100, 100 }, { 0, 0, 50, 50 }));
 			}
 			else if(map[i][j] == PUSHABLE_BLOCK_TILE)
@@ -315,7 +315,7 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	player->AddComponent(new BoxCollider(player, { 45, 45 }));
 
 	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer, { 0, 0, 0 }, false)));
-	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 50.0f, 0.005f, 5.0f)));
+	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 60.0f, 0.005f, 5.0f)));
 
 	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 1.0f);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
@@ -332,7 +332,7 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 
 	player->AddComponent(new Player(player, gameScene.get(), movementComp, playerInvenComp));
-	player->AddComponent(new Gravity(player, 0.05f));
+	player->AddComponent(new Gravity(player, .5f));
 
 	auto arm = gameScene->AddGameObject("PlayerArm", "Player");
 	auto armAnim = static_cast<Animator*>(arm->AddComponent(new Animator(player, renderer, { 0, 0, 0 }, false)));

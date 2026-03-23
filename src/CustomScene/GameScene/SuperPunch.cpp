@@ -15,10 +15,20 @@ void SuperPunch::OnIterate()
 {
 
 }
-
 void SuperPunch::OnCollisionEnter(GameObject* other)
 {
-	gameObject->SetActive(false);
+	if(other->GetName() == "Player")
+	{
+		gameObject->SetActive(false);
+	}
+}
+
+void SuperPunch::OnTriggerEnter(GameObject* other)
+{
+	if(other->GetName() == "Player")
+	{
+		gameObject->SetActive(false);
+	}
 }
 
 std::unique_ptr<Component> SuperPunch::copy()
