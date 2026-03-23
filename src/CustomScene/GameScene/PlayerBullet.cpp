@@ -38,6 +38,14 @@ void PlayerBullet::OnIterate()
 	m_tfs->SetPosition(pos + m_dir);
 }
 
+void PlayerBullet::OnCollisionEnter(GameObject* other)
+{
+	if(other->GetTag() == "Sniper")
+	{
+		gameObject->SetActive(false);
+	}
+}
+
 std::unique_ptr<Component> PlayerBullet::copy()
 {
 	return std::make_unique<PlayerBullet>(gameObject, m_dir, m_delay);

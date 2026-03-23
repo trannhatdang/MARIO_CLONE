@@ -1,7 +1,7 @@
 #include "CustomScene/GameScene/PlayerInventory.h"
 #include "engine/GameObject.h"
 
-PlayerInventory::PlayerInventory(GameObject* obj) : Component("PlayerInventory", obj)
+PlayerInventory::PlayerInventory(GameObject* obj, Font* font) : Component("PlayerInventory", obj), m_font(font)
 {
 
 }
@@ -13,12 +13,12 @@ PlayerInventory::~PlayerInventory()
 
 void PlayerInventory::OnIterate()
 {
-
+	m_font->SetText("Score: " + std::to_string(m_playerPoints) + " Punch: " + (m_hasSuperPunch ? "Super" : "Normal"));
 }
 
 std::unique_ptr<Component> PlayerInventory::copy()
 {
-	return std::make_unique<PlayerInventory>(gameObject);
+	return std::make_unique<PlayerInventory>(gameObject, m_font);
 }
 
 void PlayerInventory::AddPoints(int val)
@@ -39,4 +39,9 @@ int PlayerInventory::GetPlayerPoints() const
 bool PlayerInventory::HasSuperPunch() const
 {
 	return m_hasSuperPunch;
+}
+
+void PlayerInventory::SetFont(Font* font)
+{
+	m_font = font;
 }

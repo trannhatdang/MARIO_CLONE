@@ -20,6 +20,7 @@ std::string GetTilemap();
 std::string GetRocketSprite();
 std::string GetRocket2Sprite();
 std::string GetRocket3Sprite();
+std::string GetBlocks1Csv();
 std::string GetWorld1Csv();
 std::string GetIdleSpriteSheet();
 std::string GetRunningSpriteSheet();
@@ -34,6 +35,11 @@ std::string GetSniperSpriteSheet();
 std::string GetGameBackground();
 std::string GetStarSprite();
 std::string GetSuperPunchSprite();
+std::string GetBossSprite();
+std::string GetDestructibleBlockSprite();
+std::string GetPushableBlockSprite();
+std::string GetBackgroundMusic();
+std::string GetHitSFX();
 std::string GetFont();
 
 #endif

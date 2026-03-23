@@ -45,6 +45,16 @@
     <ClCompile Include="src\CustomScene\GameScene\Player.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\PlayerBullet.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\PlayerArm.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Boss.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\DestructibleBlock.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerInventory.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PlayerPunch.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\PunchableBlock.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\SniperBullet.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Star.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\SuperPunch.cpp" />
+    <ClCompile Include="src\engine\Components\Collider.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -441,6 +451,36 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CustomScene\GameScene\PlayerArm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Boss.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\DestructibleBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\PlayerInventory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\PlayerPunch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\PunchableBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\SniperBullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Star.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\SuperPunch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\engine\Components\Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

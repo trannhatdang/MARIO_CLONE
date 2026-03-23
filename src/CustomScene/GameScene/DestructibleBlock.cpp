@@ -41,7 +41,7 @@ void DestructibleBlock::OnCollisionEnter(GameObject* other)
 		newGb->AddComponent(new SuperPunch(newGb));
 		newGb->AddComponent(new SpriteRenderer(newGb, m_renderer, GetSuperPunchSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	}
-	newGb->AddComponent(new BoxCollider(newGb, { 25, 25 }, true, true));
+	newGb->AddComponent(new BoxCollider(newGb, { 25, 25 }, false, true));
 	newGb->GetTransform()->SetPosition(gameObject->GetTransform()->GetPosition());
 
 	gameObject->SetActive(false);

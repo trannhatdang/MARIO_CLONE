@@ -18,10 +18,8 @@ void Star::OnIterate()
 
 void Star::OnCollisionEnter(GameObject* other)
 {
-	if(other->GetTag() == "Player")
-	{
-		gameObject->SetActive(false);
-	}
+	std::cout << "HI" << std::endl;
+	gameObject->SetActive(false);
 }
 
 std::unique_ptr<Component> Star::copy()

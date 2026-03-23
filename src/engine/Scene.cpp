@@ -54,6 +54,11 @@ void Scene::RegisterCollider(BoxCollider* rb)
 	m_colliders.push_back(rb);
 }
 
+void Scene::DeregisterCollider(BoxCollider* rb)
+{
+	m_colliders.erase(std::remove(m_colliders.begin(), m_colliders.end(), rb), m_colliders.end());
+}
+
 GameObject* Scene::AddGameObject(const std::string& name, const std::string& tag)
 {
 	this->m_gameObjects.push_back(std::make_unique<GameObject>(this, name, tag));

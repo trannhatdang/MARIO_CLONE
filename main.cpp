@@ -46,7 +46,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 	char windowCaption[5] = "game";
 	SDL_SetAppMetadata("MARIO CLONE", "0.1", "deng_MARIO");
 
-	if (!SDL_Init(SDL_INIT_VIDEO)) {
+	if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
 		SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
 		return SDL_APP_FAILURE;
 	}

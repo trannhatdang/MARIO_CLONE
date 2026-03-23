@@ -85,26 +85,28 @@ void Boss::OnIterate()
 		m_timeSinceLastShooting = 0.0f;
 	}
 
-	Vector3 pos = gameObject->GetTransform()->GetRelativePosition();
-
-	if(m_movingLeft)
-	{
-		if(pos.x <= m_left)
-		{
-			m_movingLeft = false;
-		}
-
-		gameObject->GetTransform()->SetPosition(pos + Vector3(-1, 0, 0));
-	}
-	else
-	{
-		if(pos.x >= m_left)
-		{
-			m_movingLeft = false;
-		}
-		gameObject->GetTransform()->SetPosition(pos + Vector3(1, 0, 0));
-
-	}
+	// Vector3 pos = gameObject->GetTransform()->GetRelativePosition();
+	//
+	// if(m_movingLeft)
+	// {
+	// 	if(pos.x <= m_left)
+	// 	{
+	// 		m_movingLeft = false;
+	// 		return;
+	// 	}
+	//
+	// 	gameObject->GetTransform()->SetPosition(pos + Vector3(-1, 0, 0));
+	// }
+	// else
+	// {
+	// 	if(pos.x >= m_right)
+	// 	{
+	// 		m_movingLeft = true;
+	// 		return;
+	// 	}
+	// 	gameObject->GetTransform()->SetPosition(pos + Vector3(1, 0, 0));
+	//
+	// }
 }
 
 std::unique_ptr<Component> Boss::copy()

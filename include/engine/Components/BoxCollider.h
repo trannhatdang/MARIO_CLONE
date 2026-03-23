@@ -53,6 +53,7 @@ class BoxCollider : public Component
 		void SetCenter(const Vector3& center);
 		Vector3 CheckPath(const Vector3& pos, const Vector3f& dir);
 		GameObject* CheckCollision(const Vector3& pos) const;
+		void DeregisterCollider();
 
 		std::unique_ptr<Component> copy();
 };

@@ -10,6 +10,8 @@ class Animator : public Component
 {
 	private:
 		SDL_Renderer* m_renderer;
+		bool m_relative;
+
 		Vector3f m_anchor;
 		AnimationNode* m_currNode = nullptr;
 		AnimationNode* m_startNode;
@@ -17,7 +19,7 @@ class Animator : public Component
 
 		std::vector<std::unique_ptr<AnimationNode>> m_animations;
 	public:
-		Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor = { 0, 0, 0 });
+		Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor = { 0, 0, 0 }, bool relative = true);
 		void OnStart();
 		void OnIterate();
 		void OnDraw(SDL_Renderer* renderer);
@@ -29,6 +31,8 @@ class Animator : public Component
 		AnimationNode* GetAnyNode();
 		void SetStartNode(AnimationNode* node);
 		SDL_FRect GetDstRect() const;
+
+		Vector3 GetPosition() const;
 };
 
 #endif

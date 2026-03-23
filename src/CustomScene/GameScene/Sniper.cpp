@@ -1,8 +1,7 @@
 #include "CustomScene/GameScene/Sniper.h"
 
-Sniper::Sniper(GameObject* obj, Scene* currScene, PlayerInventory* playerInven) : Component("Sniper", obj), m_scene(currScene), m_playerInven(playerInven)
+Sniper::Sniper(GameObject* obj, Scene* currScene, PlayerInventory* playerInven, Audio* audio) : Component("Sniper", obj), m_scene(currScene), m_audio(audio), m_playerInven(playerInven)
 {
-
 }
 
 Sniper::~Sniper()
@@ -50,7 +49,9 @@ void Sniper::OnIterate()
 	if(m_hp <= 0)
 	{
 		gameObject->SetActive(false);
+		static_cast<BoxCollider*>(gameObject->GetComponent("BoxCollider"))->DeregisterCollider();
 		m_playerInven->AddPoints(1);
+		m_audio->Play();
 	}
 }
 
@@ -68,7 +69,7 @@ void Sniper::OnCollisionEnter(GameObject* other)
 
 std::unique_ptr<Component> Sniper::copy()
 {
-	return std::make_unique<Sniper>(gameObject, m_scene, m_playerInven);
+	return std::make_unique<Sniper>(gameObject, m_scene, m_playerInven, m_audio);
 }
 
 bool Sniper::IsShooting() const

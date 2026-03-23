@@ -10,6 +10,7 @@
 #include "engine/Components/BoxCollider.h"
 #include "engine/Components/Font.h"
 #include "engine/Components/UI/Button.h"
+#include "CustomScene/GameScene/Audio.h"
 #include "Selector.h"
 #include "GrowBig.h"
 #include "SlowMovingBackground.h"

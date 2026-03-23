@@ -20,6 +20,12 @@
 #include "Player.h"
 #include "PlayerArm.h"
 #include "PlayerInventory.h"
+#include "DestructibleBlock.h"
+#include "PunchableBlock.h"
+#include "Star.h"
+#include "SuperPunch.h"
+#include "Boss.h"
+#include "Audio.h"
 
 void SetWorld(int val);
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3));

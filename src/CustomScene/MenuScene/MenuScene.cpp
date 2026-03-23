@@ -109,8 +109,10 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	SDL_Renderer* renderer = menuScene->GetRenderer();
 	auto background = menuScene->AddGameObject("Background", "Background");
 	background->GetTransform()->SetPosition({ -200, -200, 0});
-	background->AddComponent(new SpriteRenderer(background, renderer, GetBackgroundSprite(), {0, 0, 0}, background_srcrect, background_dstrect));
+	background->AddComponent(new SpriteRenderer(background, renderer, GetGameBackground(), {0, 0, 0}, background_srcrect, background_dstrect));
 	background->AddComponent(new SlowMovingBackground(background));
+	Audio* aud = static_cast<Audio*>(background->AddComponent(new Audio(background, GetBackgroundMusic(), 10000)));
+	aud->Play();
 
 	//MENU
 	//STARTBUTTON

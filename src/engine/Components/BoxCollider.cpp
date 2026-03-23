@@ -370,6 +370,11 @@ GameObject* BoxCollider::CheckCollision(const Vector3& pos) const
 	return nullptr;
 }
 
+void BoxCollider::DeregisterCollider()
+{
+	gameObject->GetScene()->DeregisterCollider(this);
+}
+
 std::unique_ptr<Component> BoxCollider::copy()
 {
 	return std::make_unique<BoxCollider>(gameObject, m_offset);

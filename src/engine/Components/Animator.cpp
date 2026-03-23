@@ -1,6 +1,6 @@
 #include "engine/Components/Animator.h"
 
-Animator::Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor) : Component("Animator", obj), m_renderer(renderer), m_anchor(anchor)
+Animator::Animator(GameObject* obj, SDL_Renderer* renderer, Vector3f anchor, bool relative) : Component("Animator", obj), m_renderer(renderer), m_relative(relative), m_anchor(anchor)
 {
 	m_anyNode = std::make_unique<AnimationNode>();
 }
@@ -55,7 +55,7 @@ void Animator::OnIterate()
 
 void Animator::OnDraw(SDL_Renderer* renderer)
 {
-	auto pos = gameObject->GetTransform()->GetPosition();
+	auto pos = this->GetPosition();
 
 	if(m_currNode)
 	{
@@ -109,6 +109,18 @@ void Animator::SetStartNode(AnimationNode* node)
 SDL_FRect Animator::GetDstRect() const
 {
 	return m_currNode->anim->GetDstRect();
+}
+
+Vector3 Animator::GetPosition() const
+{
+	if(m_relative)
+	{
+		return gameObject->GetTransform()->GetRelativePosition();
+	}
+	else
+	{
+		return gameObject->GetTransform()->GetPosition();
+	}
 }
 
 //I WILL NEVER COPY

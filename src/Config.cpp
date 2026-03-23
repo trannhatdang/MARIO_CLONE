@@ -21,6 +21,7 @@ const std::string ROCKET_FILEPATH = ".\\data\\sprites\\rocket.png";
 const std::string ROCKET2_FILEPATH = ".\\data\\sprites\\rocket2.png";
 const std::string ROCKET3_FILEPATH = ".\\data\\sprites\\rocket3.png";
 const std::string WORLD1_CSV_FILEPATH = ".\\data\\world\\world1.csv";
+const std::string BLOCKS1_CSV_FILEPATH = ".\\data\\world\\blocks1.csv";
 const std::string IDLE_FILEPATH = ".\\data\\sprites\\player_idle.png";
 const std::string RUNNING_FILEPATH = ".\\data\\sprites\\player_run.png";
 const std::string ACTION_FILEPATH = ".\\data\\sprites\\player_action.png";
@@ -32,9 +33,14 @@ const std::string FLIPPED_ARM_FILEPATH = ".\\data\\sprites\\flipped_player_arm.p
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\player.png";
 const std::string ENEMY_WORLD1_CSV_FILEPATH = ".\\data\\world\\enemy1.csv";
 const std::string SNIPER_FILEPATH = ".\\data\\sprites\\sniper.png";
+const std::string BOSS_FILEPATH = ".\\data\\sprites\\boss.png";
 const std::string GAMEBACKGROUND_FILEPATH = ".\\data\\sprites\\game_background.png";
 const std::string STAR_FILEPATH = ".\\data\\sprites\\star.png";
 const std::string SUPER_PUNCH_FILEPATH = ".\\data\\sprites\\super_punch.png";
+const std::string DESTRUCTIBLE_BLOCK_FILEPATH = ".\\data\\sprites\\destructible_block.png";
+const std::string PUSHABLE_BLOCK_FILEPATH = ".\\data\\sprites\\pushable_block.png";
+const std::string BACKGROUND_MUSIC = ".\\data\\media\\background.wav";
+const std::string HIT_SFX = ".\\data\\media\\hit.wav";
 const std::string FONT_FILEPATH = ".\\data\\VCR_OSD_MONO.ttf";
 
 int GetWindowWidth(){
@@ -132,6 +138,11 @@ std::string GetRocket3Sprite()
 	return ROCKET3_FILEPATH;
 }
 
+std::string GetBlocks1Csv()
+{
+	return BLOCKS1_CSV_FILEPATH;
+}
+
 std::string GetWorld1Csv()
 {
 	return WORLD1_CSV_FILEPATH;
@@ -205,6 +216,31 @@ std::string GetStarSprite()
 std::string GetSuperPunchSprite()
 {
 	return SUPER_PUNCH_FILEPATH;
+}
+
+std::string GetBossSprite()
+{
+	return BOSS_FILEPATH;
+}
+
+std::string GetDestructibleBlockSprite()
+{
+	return DESTRUCTIBLE_BLOCK_FILEPATH;
+}
+
+std::string GetPushableBlockSprite()
+{
+	return PUSHABLE_BLOCK_FILEPATH;
+}
+
+std::string GetBackgroundMusic()
+{
+	return BACKGROUND_MUSIC;
+}
+
+std::string GetHitSFX()
+{
+	return HIT_SFX;
 }
 
 std::string GetFont()

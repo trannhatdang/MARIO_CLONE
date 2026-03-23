@@ -8,11 +8,13 @@
 #include "SniperBullet.h"
 #include "PlayerInventory.h"
 #include "Config.h"
+#include "Audio.h"
 
 class Sniper : public Component
 {
 	private:
 		Scene* m_scene;
+		Audio* m_audio;
 		PlayerInventory* m_playerInven;
 
 		int m_hp = 5;
@@ -25,7 +27,7 @@ class Sniper : public Component
 
 		void shoot();
 	public:
-		Sniper(GameObject* obj, Scene* currScene, PlayerInventory*);
+		Sniper(GameObject* obj, Scene* currScene, PlayerInventory*, Audio*);
 		~Sniper();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);
