@@ -220,7 +220,7 @@ void GenerateColliders1(const std::unique_ptr<Scene>& gameScene, const std::vect
 	auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
 	penisBaseCol->GetTransform()->SetPosition({ 350, 450, 0 });
 	penisBaseCol->AddComponent(new SpriteRenderer(penisBaseCol, gameScene->GetRenderer(), GetTilemap(), { 0, 0, 0 }, { 300, 0, 100, 100 }, { 0, 0, 50, 50 }));
-	penisBaseCol->AddComponent(new BoxCollider(penisBaseCol, { 50, 50 }));
+	penisBaseCol->AddComponent(new BoxCollider(penisBaseCol, { 50, 50 }, false, true));
 	
 	// for(int i = 0; i < map.size(); ++i)
 	// {
@@ -272,22 +272,22 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
 	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 50.0f, 0.005f, 5.0f)));
 
-	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 2.0f);
+	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 1.0f);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
-	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.5f);
-	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActing, 0.5f);
+	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.05f);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActing, 0.05f);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumping, 1.0f);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActing, 1.0f);
 
 	bodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdleLeft, 2.0f, SDL_FLIP_HORIZONTAL);
 	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
-	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningLeft, 0.5f, SDL_FLIP_HORIZONTAL);
-	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActingLeft, 0.5f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningLeft, 0.05f, SDL_FLIP_HORIZONTAL);
+	bodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActingLeft, 0.05f, SDL_FLIP_HORIZONTAL);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumpingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 
 	player->AddComponent(new Player(player, gameScene.get(), movementComp));
-	player->AddComponent(new Gravity(player, 0.1f));
+	player->AddComponent(new Gravity(player, 0.05f));
 
 	auto arm = gameScene->AddGameObject("PlayerArm", "Player");
 	auto armAnim = static_cast<Animator*>(arm->AddComponent(new Animator(player, renderer)));

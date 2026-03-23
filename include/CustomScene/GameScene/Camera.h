@@ -5,6 +5,7 @@
 #include "engine/Components/Transform.h"
 #include "engine/main.h"
 #include "Config.h"
+#include "Player.h"
 
 class Camera : public Component
 {

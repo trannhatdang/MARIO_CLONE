@@ -25,7 +25,7 @@ static bool CompareBox(Vector3 pos, BColliderOff off, Vector3 other_pos, BCollid
 	return !(a || b || c || d);
 }
 
-BoxCollider::BoxCollider(GameObject* gameObject, const BColliderOff& offset, bool isTrigger) : Component("BoxCollider", gameObject), m_trigger(isTrigger), m_offset(offset) 
+BoxCollider::BoxCollider(GameObject* gameObject, const BColliderOff& offset, bool isTrigger, bool relative) : Component("BoxCollider", gameObject), m_trigger(isTrigger), m_relative(relative), m_offset(offset)
 {
 	gameObject->GetScene()->RegisterCollider(this);
 }
@@ -87,9 +87,9 @@ void BoxCollider::checkCollisionOfCurr()
 		GameObject* other_obj = other_col->gameObject;
 		if(other_col == this || m_objectsCollided.find(other_obj) != m_objectsCollided.end()) continue;
 
-		Vector3 pos = static_cast<Transform*>(gameObject->GetTransform())->GetPosition();
+		Vector3 pos = GetPosition();
 		BColliderOff off = m_offset;
-		Vector3 other_pos = ((Transform*)(other_obj->GetTransform()))->GetPosition();
+		Vector3 other_pos = ((BoxCollider*)(other_obj->GetComponent("BoxCollider")))->GetPosition();
 		BColliderOff other_off = other_col->GetOffset();
 
 		if(!CompareBox(pos, off, other_pos, other_off)) continue; //No collision
@@ -122,8 +122,7 @@ void BoxCollider::OnDraw(SDL_Renderer* renderer)
 {
 	if(!m_debug) return;
 
-	auto pos = gameObject->GetTransform()->GetPosition();
-	//auto cameraPos = GetCameraPos();
+	auto pos = GetPosition();
 
 	SDL_FRect rect = {(float)(pos.x), (float)(pos.y), (float)m_offset.w, (float)m_offset.h};
 
@@ -155,7 +154,7 @@ void BoxCollider::DoCollision(GameObject* other_obj)
 	BoxCollider* other_col = (BoxCollider*)other_obj->GetComponent("BoxCollider");
 
 	Rigidbody* other_rb = (Rigidbody*)other_obj->GetComponent("Rigidbody");
-	Vector3 pos = gameObject->GetTransform()->GetPosition();
+	Vector3 pos = this->GetPosition();
 
 	if(!other_rb || other_rb->GetMass() >= rb->GetMass())
 	{
@@ -244,9 +243,21 @@ Vector3 BoxCollider::GetCenter() const
 	}
 	else
 	{
-		auto pos = gameObject->GetTransform()->GetPosition();
+		auto pos = GetPosition();
 
 		return { pos.x + m_offset.w/2, pos.y + m_offset.h/2, pos.z };
+	}
+}
+
+Vector3 BoxCollider::GetPosition() const
+{
+	if(m_relative)
+	{
+		return gameObject->GetTransform()->GetRelativePosition();
+	}
+	else
+	{
+		return gameObject->GetTransform()->GetPosition();
 	}
 }
 
@@ -347,7 +358,7 @@ GameObject* BoxCollider::CheckCollision(const Vector3& pos) const
 		GameObject* other_obj = other_col->gameObject;
 
 		BColliderOff off = m_offset;
-		Vector3 other_pos = ((Transform*)(other_obj->GetTransform()))->GetPosition();
+		Vector3 other_pos = ((BoxCollider*)(other_obj->GetComponent("BoxCollider")))->GetPosition();
 		BColliderOff other_off = other_col->GetOffset();
 
 		if(CompareBox(pos, off, other_pos, other_off))

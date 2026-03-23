@@ -1,5 +1,5 @@
-#ifndef B_COLLIDER_H_
-#define B_COLLIDER_H_
+#ifndef COLLIDER_H_
+#define COLLIDER_H_
 
 #include "engine/Components/Component.h"
 #include "engine/main.h"
@@ -10,26 +10,13 @@ class Rigidbody;
 
 //Only 2D and only box, normally this should inherit another collider component but this should do
 
-typedef struct BColliderOff
-{
-	int w;
-	int h;
-} BColliderOff;
-
-typedef struct PointDistInfo
-{
-	bool isIn;
-	Vector3 dist;
-} PointDistInfo;
-
-class BoxCollider : public Component
+class Collider : public Component
 {
 	private:
 		bool m_trigger = false;
-		bool m_relative = false;
 		bool m_debug = false;
 		bool m_custom_center = false;
-		BColliderOff m_offset;
+		SDL_Rect m_rect;
 		Vector3 m_center;
 		std::unordered_set<GameObject*> m_objectsCollided;
 
@@ -37,7 +24,7 @@ class BoxCollider : public Component
 		Vector3 findDirectionToPushAway(const Vector3& pos) const;
 		void checkCollisionOfCurr();
 	public:
-		BoxCollider(GameObject* gameObject, const BColliderOff& offset, bool isTrigger = false, bool isRelative = false);
+		Collider(GameObject* gameObject, SDL_Rect rect, bool isTrigger = false);
 		void CheckCollision();
 		void OnStart();
 		void OnIterate();
@@ -46,10 +33,8 @@ class BoxCollider : public Component
 		void OnEvent(SDL_Event* event);
 		void DoCollision(GameObject* other_obj);
 		void Collide(GameObject* other_obj);
-		BColliderOff GetOffset() const;
+		SDL_Rect GetRect() const;
 		Vector3 GetCenter() const;
-		Vector3 GetPosition() const;
-		void SetOffset(const BColliderOff& offset);
 		void SetCenter(const Vector3& center);
 		Vector3 CheckPath(const Vector3& pos, const Vector3f& dir);
 		GameObject* CheckCollision(const Vector3& pos) const;

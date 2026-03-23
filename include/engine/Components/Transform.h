@@ -19,6 +19,7 @@ class Transform : public Component
 		std::unique_ptr<Component> copy();
 		Vector3 GetOGPosition() const;
 		Vector3 GetPosition() const;
+		Vector3 GetRelativePosition() const;
 		void SetPosition(const Vector3& pos);
 };
 

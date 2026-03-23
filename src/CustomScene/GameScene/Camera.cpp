@@ -15,30 +15,32 @@ void Camera::moveLeft()
 {
 	Vector3 camPos = GetCameraPos();
 	(*m_setCameraPosFunc)(camPos + Vector3(-1, 0, 0));
-
-	std::cout << "camera moving left" << std::endl;
 }
 
 void Camera::moveRight()
 {
 	Vector3 camPos = GetCameraPos();
 	(*m_setCameraPosFunc)(camPos + Vector3(1, 0, 0));
-	std::cout << "camera moving right" << std::endl;
 }
 
 void Camera::OnIterate()
 {
-	Vector3 camPos = GetCameraPos();
 	Vector3 playerPos = m_player_tfs->GetPosition();
-	SDL_Rect l_rect = { camPos.x, camPos.y, 100, 630 };
-	SDL_Rect r_rect = { camPos.x + 315, camPos.y, 560, 630 };
+	Player* player = static_cast<Player*>(m_player->GetComponent("Player"));
+	SDL_Rect l_rect = { 0, 0, 50, 630 };
+	SDL_Rect r_rect = { 720, 0, 400, 630 };
 
-	if(IsPointInsideRect(playerPos, l_rect))
+	if(!player->IsRunning())
+	{
+		return;
+	}
+
+	if(IsPointInsideRect(playerPos, l_rect) && player->IsFacingLeft())
 	{
 		moveLeft();
 	}
 	
-	if(IsPointInsideRect(playerPos, r_rect))
+	if(IsPointInsideRect(playerPos, r_rect) && !player->IsFacingLeft())
 	{
 		moveRight();
 	}

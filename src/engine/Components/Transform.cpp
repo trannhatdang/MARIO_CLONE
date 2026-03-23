@@ -32,12 +32,17 @@ Vector3 Transform::GetOGPosition() const
 
 Vector3 Transform::GetPosition() const
 {
+	return m_pos;
+}
+
+Vector3 Transform::GetRelativePosition() const
+{
 	Vector3 cameraPos = GetCameraPos();
 	Vector3 ans = m_pos;
 	ans.x = ans.x - cameraPos.x;
-	ans.x = ans.y - cameraPos.y;
+	ans.y = ans.y - cameraPos.y;
 
-	return m_pos;
+	return ans;
 }
 
 void Transform::SetPosition(const Vector3& pos)
