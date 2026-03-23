@@ -9,8 +9,8 @@ const int BLOCK_TILE = 3;
 const int DESTRUCTABLE_BLOCK_TILE = 4;
 const int FLASHING_BLOCK_TILE = 5;
 
-const int ROCKET_SPAWNER = 0;
-const int SNIPER = 1;
+const int ROCKET_SPAWNER = 1;
+const int SNIPER = 2;
 
 const int SHOOTING_ARM = 0;
 const int PUNCHING_ARM = 1;
@@ -22,6 +22,7 @@ const int TILE_SIZE = 50;
 static SDL_FRect tile_dstrect = { 0, 0, TILE_SIZE, TILE_SIZE };
 
 static std::vector<std::vector<GameObject*>> worlds;
+static PlayerInventory* playerInvenComp;
 
 void SetWorld(int val)
 {
@@ -189,7 +190,7 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 				case SNIPER:
 					{
 						auto sniper = gameScene->AddGameObject("Sniper", "Enemy");
-						sniper->AddComponent(new Sniper(sniper, gameScene.get()));
+						sniper->AddComponent(new Sniper(sniper, gameScene.get(), playerInvenComp));
 						sniper->GetTransform()->SetPosition({ TILE_SIZE * i, TILE_SIZE * j, 0 });
 						Animator* sniperAnim = static_cast<Animator*>(sniper->AddComponent(new Animator(sniper, renderer)));
 
@@ -217,24 +218,24 @@ void GenerateColliders1(const std::unique_ptr<Scene>& gameScene, const std::vect
 	groundCol->AddComponent(new BoxCollider(groundCol, { 12000, 50 * 4 }));
 	//groundCol->AddComponent(new Rigidbody(groundCol, INT_MAX));
 
-	auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
-	penisBaseCol->GetTransform()->SetPosition({ 350, 450, 0 });
-	penisBaseCol->AddComponent(new SpriteRenderer(penisBaseCol, gameScene->GetRenderer(), GetTilemap(), { 0, 0, 0 }, { 300, 0, 100, 100 }, { 0, 0, 50, 50 }));
-	penisBaseCol->AddComponent(new BoxCollider(penisBaseCol, { 50, 50 }, false, true));
+	// auto penisBaseCol = gameScene->AddGameObject("PenisBaseCol", "Collider");
+	// penisBaseCol->GetTransform()->SetPosition({ 350, 450, 0 });
+	// penisBaseCol->AddComponent(new SpriteRenderer(penisBaseCol, gameScene->GetRenderer(), GetTilemap(), { 0, 0, 0 }, { 300, 0, 100, 100 }, { 0, 0, 50, 50 }));
+	// penisBaseCol->AddComponent(new BoxCollider(penisBaseCol, { 50, 50 }, false, true));
 	
-	// for(int i = 0; i < map.size(); ++i)
-	// {
-	// 	for(int j = 0; j < map[i].size(); ++j)
-	// 	{
-	// 		if(map[i][j] <= 2) continue;
-	//
-	// 		auto col = gameScene->AddGameObject("Collider", "Collider");
-	// 		Vector3 pos = { 50 * j, 50 * i, 0 };
-	// 		// std::cout << pos << std::endl;
-	// 		col->GetTransform()->SetPosition({ 50 * j, 50 * i, 0 });
-	// 		col->AddComponent(new BoxCollider(col, { 50, 50 }));
-	// 	}
-	// }
+	for(int i = 0; i < map.size(); ++i)
+	{
+		for(int j = 0; j < map[i].size(); ++j)
+		{
+			if(map[i][j] <= 2) continue;
+
+			auto col = gameScene->AddGameObject("Collider", "Collider");
+			Vector3 pos = { 50 * j, 50 * i, 0 };
+			// std::cout << pos << std::endl;
+			col->GetTransform()->SetPosition({ 50 * j, 50 * i, 0 });
+			col->AddComponent(new BoxCollider(col, { 50, 50 }, false, true));
+		}
+	}
 }
 
 void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
@@ -252,7 +253,7 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 	worlds[0].push_back(tilemap);
 
 	GenerateColliders1(gameScene, world1_map);
-	//SpawnEnemy1(gameScene);
+	SpawnEnemy1(gameScene);
 	//SpawnBoss1(gameScene);
 
 	//SetActiveWorld1(false);
@@ -262,12 +263,15 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 {
 	SDL_Renderer* renderer = gameScene->GetRenderer();
 
+	auto playerInven = gameScene->AddGameObject("PlayerInventory", "Inventory");
+	playerInvenComp = static_cast<PlayerInventory*>(playerInven->AddComponent(new PlayerInventory(playerInven)));
 	GenerateWorld1(gameScene);
+		
 	auto player = gameScene->AddGameObject("Player", "Player");
 	player->GetTransform()->SetPosition( { 560, 315, 0 });
 
 	player->AddComponent(new Rigidbody(player, false, 1, 10));
-	player->AddComponent(new BoxCollider(player, { 50, 50 }));
+	player->AddComponent(new BoxCollider(player, { 45, 45 }));
 
 	auto bodyAnim = static_cast<Animator*>(player->AddComponent(new Animator(player, renderer)));
 	auto movementComp = static_cast<Movement*>(player->AddComponent(new Movement(player, 50.0f, 0.005f, 5.0f)));
@@ -286,7 +290,7 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumpingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 
-	player->AddComponent(new Player(player, gameScene.get(), movementComp));
+	player->AddComponent(new Player(player, gameScene.get(), movementComp, playerInvenComp));
 	player->AddComponent(new Gravity(player, 0.05f));
 
 	auto arm = gameScene->AddGameObject("PlayerArm", "Player");

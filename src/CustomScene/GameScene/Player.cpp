@@ -1,6 +1,6 @@
 #include "CustomScene/GameScene/Player.h"
 
-Player::Player(GameObject* obj, Scene* scene, Movement* movement, float actDelay) : Component("Player", obj), m_scene(scene), m_movement(movement), m_actDelay(actDelay)
+Player::Player(GameObject* obj, Scene* scene, Movement* movement, PlayerInventory* inven, float actDelay) : Component("Player", obj), m_scene(scene), m_movement(movement), m_inven(inven), m_actDelay(actDelay)
 {
 
 }
@@ -28,11 +28,11 @@ void Player::shoot()
 	newBullet->GetTransform()->SetPosition(playerPos);
 	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetPlayerBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	newBullet->AddComponent(new PlayerBullet(newBullet, dir, 0.01f));
+	newBullet->AddComponent(new BoxCollider(newBullet, { 25, 25 }));
 }
 
 void Player::punch()
 {
-	//static_cast<Rigidbody*>(gameObject->GetComponent("Rigidbody"))->AddForce({1, 0, 0});
 	if(!m_scene)
 	{
 		return;
@@ -41,14 +41,15 @@ void Player::punch()
 
 	Vector3 pos = playerPos + (m_movement->IsFacingLeft() ? Vector3(-37, 25, 0) : Vector3(50, 25, 0));
 
-	auto newPunch = m_scene->AddGameObject("PlayerPunch", "Punch");
+	auto newPunch = m_scene->AddGameObject("PlayerPunch", m_inven->HasSuperPunch() ? "SuperPunch" : "Punch");
 	newPunch->GetTransform()->SetPosition(pos);
 	newPunch->AddComponent(new BoxCollider(newPunch, { 37, 17 }));
+	newPunch->AddComponent(new PlayerPunch(newPunch));
 }
 
 void Player::OnIterate()
 {
-	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
+	// Vector3 playerPos = gameObject->GetTransform()->GetPosition();
 	//std::cout << "player pos: " << playerPos << std::endl;
 
 	m_timeSinceLastAct += DGTime_deltaTime();
@@ -89,9 +90,25 @@ void Player::OnEvent(SDL_Event* event)
 
 }
 
+void Player::OnCollisionEnter(GameObject* other)
+{
+	if(other->GetTag() == "Star")
+	{
+		m_inven->AddPoints(10);
+	}
+	else if(other->GetTag() == "SuperPunch")
+	{
+		m_inven->SetPunch();
+	}
+	else if(other->GetTag() == "SniperBullet")
+	{
+		m_inven->AddPoints(-1);
+	}
+}
+
 std::unique_ptr<Component> Player::copy()
 {
-	return std::make_unique<Player>(gameObject, m_scene, m_movement);
+	return std::make_unique<Player>(gameObject, m_scene, m_movement, m_inven);
 }
 
 bool Player::IsFacingLeft() const

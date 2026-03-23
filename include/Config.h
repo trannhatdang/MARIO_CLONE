@@ -28,6 +28,7 @@ std::string GetArmSpriteSheet();
 std::string GetFlippedArmSpriteSheet();
 std::string GetJumpingSpriteSheet();
 std::string GetPlayerBulletSprite();
+std::string GetSniperBulletSprite();
 std::string GetEnemyWorld1Csv();
 std::string GetSniperSpriteSheet();
 std::string GetGameBackground();

@@ -1,18 +1,18 @@
-#include "CustomScene/GameScene/PlayerBullet.h"
+#include "CustomScene/GameScene/SniperBullet.h"
 #include "engine/GameObject.h"
 
-PlayerBullet::PlayerBullet(GameObject* obj, Vector3 dir, float delay) : Component("PlayerBullet", obj), m_dir(dir), m_delay(delay)
+SniperBullet::SniperBullet(GameObject* obj, Vector3 dir, float delay) : Component("SniperBullet", obj), m_dir(dir), m_delay(delay)
 {
 	m_tfs = gameObject->GetTransform();
 	m_timeSinceLastMovement = 0.0f;
 }
 
-PlayerBullet::~PlayerBullet()
+SniperBullet::~SniperBullet()
 {
 
 }
 
-void PlayerBullet::OnIterate()
+void SniperBullet::OnIterate()
 {
 	Vector3 pos = m_tfs->GetPosition();
 
@@ -38,7 +38,7 @@ void PlayerBullet::OnIterate()
 	m_tfs->SetPosition(pos + m_dir);
 }
 
-std::unique_ptr<Component> PlayerBullet::copy()
+std::unique_ptr<Component> SniperBullet::copy()
 {
-	return std::make_unique<PlayerBullet>(gameObject, m_dir, m_delay);
+	return std::make_unique<SniperBullet>(gameObject, m_dir, m_delay);
 }

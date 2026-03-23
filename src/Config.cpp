@@ -26,6 +26,7 @@ const std::string RUNNING_FILEPATH = ".\\data\\sprites\\player_run.png";
 const std::string ACTION_FILEPATH = ".\\data\\sprites\\player_action.png";
 const std::string JUMPING_FILEPATH = ".\\data\\sprites\\player_jump.png";
 const std::string PLAYER_BULLET_FILEPATH = ".\\data\\sprites\\player_bullet.png";
+const std::string SNIPER_BULLET_FILEPATH = ".\\data\\sprites\\sniper_bullet.png";
 const std::string ARM_FILEPATH = ".\\data\\sprites\\player_arm.png";
 const std::string FLIPPED_ARM_FILEPATH = ".\\data\\sprites\\flipped_player_arm.png";
 const std::string PLAYER_FILEPATH = ".\\data\\sprites\\player.png";
@@ -157,6 +158,11 @@ std::string GetJumpingSpriteSheet()
 std::string GetPlayerBulletSprite()
 {
 	return PLAYER_BULLET_FILEPATH;
+}
+
+std::string GetSniperBulletSprite()
+{
+	return SNIPER_BULLET_FILEPATH;
 }
 
 std::string GetArmSpriteSheet()

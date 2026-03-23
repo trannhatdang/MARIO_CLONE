@@ -6,8 +6,10 @@
 #include "engine/Components/Rigidbody.h"
 #include "engine/Components/Animator.h"
 #include "engine/Components/SpriteRenderer.h"
-#include "PlayerBullet.h"
 #include "Movement.h"
+#include "PlayerBullet.h"
+#include "PlayerInventory.h"
+#include "PlayerPunch.h"
 #include "Config.h"
 
 class Player : public Component
@@ -15,6 +17,7 @@ class Player : public Component
 	private:
 		Scene* m_scene;
 		Movement* m_movement;
+		PlayerInventory* m_inven;
 
 		float m_actDelay = 0.05f;
 		float m_timeSinceLastAct = 0.0f;
@@ -26,10 +29,11 @@ class Player : public Component
 		void shoot();
 		void punch();
 	public:
-		Player(GameObject* obj, Scene*, Movement*, float m_shootingDelay = 0.1f);
+		Player(GameObject* obj, Scene*, Movement*, PlayerInventory*, float m_shootingDelay = 0.1f);
 		~Player();
 		void OnIterate();
 		void OnEvent(SDL_Event* event);
+		void OnCollisionEnter(GameObject* other);
 		std::unique_ptr<Component> copy();
 
 		bool IsFacingLeft() const;
