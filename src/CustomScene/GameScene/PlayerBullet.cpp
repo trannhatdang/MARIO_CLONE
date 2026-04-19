@@ -40,7 +40,16 @@ void PlayerBullet::OnIterate()
 
 void PlayerBullet::OnCollisionEnter(GameObject* other)
 {
-	if(other->GetTag() == "Sniper")
+	if(other->GetTag() == "Sniper" || other->GetTag() == "Boss")
+	{
+		gameObject->SetActive(false);
+	}
+}
+
+void PlayerBullet::OnTriggerEnter(GameObject* other)
+{
+	// Handle trigger collisions (enemy colliders are triggers)
+	if(other->GetTag() == "Sniper" || other->GetTag() == "Boss")
 	{
 		gameObject->SetActive(false);
 	}

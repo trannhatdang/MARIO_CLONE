@@ -1,4 +1,5 @@
 #include "CustomScene/GameScene/Sniper.h"
+#include "CustomScene/GameScene/GameFrameCounter.h"
 
 Sniper::Sniper(GameObject* obj, Scene* currScene, PlayerInventory* playerInven, Audio* audio) : Component("Sniper", obj), m_scene(currScene), m_audio(audio), m_playerInven(playerInven)
 {
@@ -44,7 +45,9 @@ void Sniper::OnIterate()
 	}
 	else
 	{
-		m_shooting = (rand() % 200 < 5);
+		// Use deterministic frame counter for synchronized enemy behavior in online mode
+		// Shoot every ~200 frames when not currently shooting (deterministic, not random)
+		m_shooting = ((GetGameFrameCount() % 200) == 0);
 	}
 
 	if(m_hp <= 0)
@@ -58,6 +61,19 @@ void Sniper::OnIterate()
 
 void Sniper::OnCollisionEnter(GameObject* other)
 {
+	if(other->GetTag() == "PlayerBullet")
+	{
+		m_hp -= 1;
+	}
+	else if(other->GetTag() == "PlayerSuperPunch")
+	{
+		m_hp -= 5;
+	}
+}
+
+void Sniper::OnTriggerEnter(GameObject* other)
+{
+	// Handle trigger colliders (like player bullets which are triggers)
 	if(other->GetTag() == "PlayerBullet")
 	{
 		m_hp -= 1;

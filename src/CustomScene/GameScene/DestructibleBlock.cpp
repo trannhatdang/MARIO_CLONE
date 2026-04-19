@@ -29,20 +29,36 @@ void DestructibleBlock::OnCollisionEnter(GameObject* other)
 	}
 	
 	GameObject* newGb;
+	int itemType = 0;
 	if(m_star)
 	{
 		newGb = m_scene->AddGameObject("Star", "Star");
 		newGb->AddComponent(new Star(newGb));
 		newGb->AddComponent(new SpriteRenderer(newGb, m_renderer, GetStarSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
+		itemType = 1;
 	}
 	else
 	{
 		newGb = m_scene->AddGameObject("SuperPunch", "SuperPunch");
 		newGb->AddComponent(new SuperPunch(newGb));
 		newGb->AddComponent(new SpriteRenderer(newGb, m_renderer, GetSuperPunchSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
+		itemType = 2;
 	}
 	newGb->AddComponent(new BoxCollider(newGb, { 25, 25 }, true, true));
-	newGb->GetTransform()->SetPosition(gameObject->GetTransform()->GetPosition() + Vector3(100, 0, 0));
+	Vector3 itemPos = gameObject->GetTransform()->GetPosition() + Vector3(100, 0, 0);
+	newGb->GetTransform()->SetPosition(itemPos);
+
+	// NETWORK SYNC: Notify local player of this destruction event
+	std::vector<GameObject*> players = m_scene->GetGameObjectsWithTag("Player");
+	for(auto obj : players)
+	{
+		Player* player = static_cast<Player*>(obj->GetComponent("Player"));
+		if(player && player->IsLocal())
+		{
+			player->OnBlockDestroyed(itemType, itemPos);
+			break;
+		}
+	}
 
 	gameObject->SetActive(false);
 }

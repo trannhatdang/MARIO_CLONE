@@ -10,6 +10,7 @@
 #include "CustomScene/GameScene/GameScene.h"
 #include "CustomScene/MenuScene/MenuScene.h"
 #include "CustomScene/IntroScene/IntroScene.h"
+#include "CustomScene/GameScene/GameFrameCounter.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -23,6 +24,13 @@ static std::chrono::time_point<std::chrono::system_clock> last_iterate_point = s
 
 static Vector3 CameraPos;
 
+bool isMultiplayer = false;
+bool isOnline = false;
+bool isServer = false;
+
+std::string clientIP = "127.0.0.1";
+int clientPort = 12345;
+
 static void SetCameraPos(Vector3 pos)
 {
 	CameraPos = pos;
@@ -33,8 +41,29 @@ Vector3 GetCameraPos()
 	return CameraPos;
 }
 
+extern void SetWorld(int);
+
+static bool gameSceneGenerated = false;
+static bool lastIsOnline = false;
+static bool lastIsMultiplayer = false;
+static bool lastIsServer = false;
+
 static void ChangeScene(int index)
 {
+	if (index == 2) {
+		// Regenerate game scene if flags have changed or not yet generated
+		if (!gameSceneGenerated || 
+		    isOnline != lastIsOnline || 
+		    isMultiplayer != lastIsMultiplayer || 
+		    isServer != lastIsServer) {
+			std::cout << "Regenerating game scene with updated flags" << std::endl;
+			GenerateGameScene(scenes[2], &SetCameraPos);
+			gameSceneGenerated = true;
+			lastIsOnline = isOnline;
+			lastIsMultiplayer = isMultiplayer;
+			lastIsServer = isServer;
+		}
+	}
 	currScene = scenes[index].get();
 	currScene->OnStart();
 }
@@ -65,13 +94,15 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char** argv)
 
 	SDL_SetRenderLogicalPresentation(renderer, GetWindowWidth(), GetWindowHeight(), SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
+	SDL_StartTextInput(window);
+
 	scenes[0] = std::make_unique<Scene>("IntroScene", &ChangeScene, renderer, window);
-	scenes[1] = std::make_unique<Scene>("MenuScene", &ChangeScene, renderer, window);
+	scenes[1] = std::make_unique<MenuScene>("MenuScene", &ChangeScene, renderer, window);
 	scenes[2] = std::make_unique<Scene>("GameScene", &ChangeScene, renderer, window);
 
 	GenerateIntroScene(scenes[0]);
-	GenerateMenuScene(scenes[1], &SetWorld);
-	GenerateGameScene(scenes[2], &SetCameraPos);
+	// GameScene will be generated when the user starts a game from the menu
+	// This allows the online flags to be set before generation
 
 	ChangeScene(1);
 
@@ -90,6 +121,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 		last_iterate_point = std::chrono::system_clock::now();
 	}
 	currScene->OnIterate();
+	
+	// Increment global frame counter for deterministic enemy sync
+	IncrementGameFrameCount();
 	
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);

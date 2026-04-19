@@ -1,4 +1,6 @@
 #include "CustomScene/GameScene/Boss.h"
+#include "CustomScene/GameScene/GameFrameCounter.h"
+#include <cmath>
 
 Boss::Boss(GameObject* obj, Scene* scene, PlayerInventory* playerInven, int left, int right) : Component("Boss", obj), m_scene(scene), m_inven(playerInven), m_left(left), m_right(right)
 {
@@ -26,6 +28,8 @@ void Boss::shoot()
 	{
 		return;
 	}
+
+	m_timeSinceLastShot = 0.0f;  // FIXED: Reset timer so bullets don't fire too quickly
 
 	Vector3 pos = gameObject->GetTransform()->GetPosition();
 
@@ -90,44 +94,58 @@ void Boss::OnIterate()
 	{
 		gameObject->SetActive(false);
 	}
+	
 	Vector3 pos = gameObject->GetTransform()->GetRelativePosition();
-
-	if(rand() % 200 < 5)
+	int frameCount = GetGameFrameCount();
+	
+	// Horizontal pacing: Smooth left-right movement
+	// Every 1000 frames, change direction; moves 0.3 pixels per frame
+	int movePattern = (frameCount % 1000);
+	if(movePattern < 500)
 	{
-		pos.x = std::max(m_left, std::min(m_right, pos.x + rand() % 10));
-		pos.x = std::max(m_up, std::min(m_down, pos.y + rand() % 10));
-
-		gameObject->GetTransform()->SetPosition(pos);
+		// Move right
+		pos.x += 0.3f;
 	}
-
-	//
-	// if(m_movingLeft)
-	// {
-	// 	if(pos.x <= m_left)
-	// 	{
-	// 		m_movingLeft = false;
-	// 		return;
-	// 	}
-	//
-	// 	gameObject->GetTransform()->SetPosition(pos + Vector3(-1, 0, 0));
-	// }
-	// else
-	// {
-	// 	if(pos.x >= m_right)
-	// 	{
-	// 		m_movingLeft = true;
-	// 		return;
-	// 	}
-	// 	gameObject->GetTransform()->SetPosition(pos + Vector3(1, 0, 0));
-	//
-	// }
+	else
+	{
+		// Move left
+		pos.x -= 0.3f;
+	}
+	
+	// Clamp to bounds
+	pos.x = std::max<float>((float)m_left, std::min<float>((float)m_right, pos.x));
+	
+	// Vertical bobbing: Subtle up-down motion
+	// Oscillates smoothly using frame count
+	float bobPhase = (frameCount % 200) / 200.0f; // 0 to 1 over 200 frames
+	float bobAmount = sin(bobPhase * 3.14159f * 2.0f) * 20.0f; // ±20 pixel bob (was 30)
+	pos.y = 400.0f + bobAmount;
+	
+	// Clamp vertical to bounds
+	pos.y = std::max<float>((float)m_up, std::min<float>((float)m_down, pos.y));
+	
+	gameObject->GetTransform()->SetPosition(pos);
 }
 
 void Boss::OnCollisionEnter(GameObject* obj)
 {
 	if(obj->GetTag() == "PlayerBullet")
 	{
-		m_hp -= 100;
+		m_hp -= 1;
+	}
+	else if(obj->GetTag() == "PlayerSuperPunch")
+	{
+		m_hp -= 10000;
+		gameObject->SetActive(false);
+	}
+}
+
+void Boss::OnTriggerEnter(GameObject* obj)
+{
+	// Handle trigger colliders (like player bullets which are triggers)
+	if(obj->GetTag() == "PlayerBullet")
+	{
+		m_hp -= 1;
 	}
 	else if(obj->GetTag() == "PlayerSuperPunch")
 	{

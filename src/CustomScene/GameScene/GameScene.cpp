@@ -1,4 +1,6 @@
 #include "CustomScene/GameScene/GameScene.h"
+#include "CustomScene/GameScene/GameFrameCounter.h"
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -24,6 +26,13 @@ const int TILE_SIZE = 50;
 
 static std::vector<std::vector<GameObject*>> worlds;
 static PlayerInventory* playerInvenComp;
+static Network* gameNetwork = nullptr;
+Scene* g_currentGameScene = nullptr;  // Global reference for spawning remote player on demand (not static so other files can access)
+
+// Global enemy references for syncing death state
+GameObject* g_sniper1 = nullptr;
+GameObject* g_sniper2 = nullptr;
+GameObject* g_boss = nullptr;
 
 void SetWorld(int val)
 {
@@ -173,6 +182,7 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 	SDL_Renderer* renderer = gameScene->GetRenderer();
 	std::vector<std::vector<int>> enemy1_map = GetMapFromCsv(GetEnemyWorld1Csv());
 	int m = enemy1_map.size();
+	int sniperCount = 0;  // Track which sniper we're spawning
 	for(int i = 0; i < m; ++i)
 	{
 		int n = enemy1_map[i].size();
@@ -199,6 +209,14 @@ void SpawnEnemy1(const std::unique_ptr<Scene>& gameScene)
 
 						sniperAnim->AddAnimation(nullptr, GetSniperSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsSniperIdle, 2.0f);
 						sniperAnim->AddAnimation(nullptr, GetSniperSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsSniperShooting, 1.0f);
+						
+						// Store enemy reference for network sync
+						if (sniperCount == 0) {
+							g_sniper1 = sniper;
+						} else if (sniperCount == 1) {
+							g_sniper2 = sniper;
+						}
+						sniperCount++;
 					}
 
 					break;
@@ -216,6 +234,9 @@ void SpawnBoss1(const std::unique_ptr<Scene>& gameScene)
 	boss->AddComponent(new SpriteRenderer(boss, gameScene->GetRenderer(), GetBossSprite(), { 0, 0, 0 }, { 0, 0, 160, 240 }, {0, 0, 80, 120 }));
 	boss->AddComponent(new BoxCollider(boss, { 80, 120 }, false, true));
 	boss->AddComponent(new Boss(boss, gameScene.get(), playerInvenComp, 0, 1120));
+	
+	// Store boss reference for network sync
+	g_boss = boss;
 }
 
 void GenerateBlocks1(const std::unique_ptr<Scene>& gameScene, const std::vector<std::vector<int>>& map)
@@ -295,6 +316,12 @@ void GenerateWorld1(const std::unique_ptr<Scene>& gameScene)
 
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3))
 {
+	std::cout << "\n=== GenerateGameScene called ===" << std::endl;
+	std::cout << "isOnline: " << isOnline << " | isMultiplayer: " << isMultiplayer << " | isServer: " << isServer << std::endl;
+	
+	// Reset frame counter to sync enemy behavior between clients
+	g_gameFrameCount = 0;
+	
 	SDL_Renderer* renderer = gameScene->GetRenderer();
 
 	auto playerInven = gameScene->AddGameObject("PlayerInventory", "Inventory");
@@ -331,8 +358,28 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumpingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 	bodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
 
-	player->AddComponent(new Player(player, gameScene.get(), movementComp, playerInvenComp));
+	auto playerComp = static_cast<Player*>(player->AddComponent(new Player(player, gameScene.get(), movementComp, playerInvenComp)));
+	playerComp->SetLocal(true);  // Local player
 	player->AddComponent(new Gravity(player, .5f));
+
+	// Add visual indicator for local player (green badge above player)
+	auto indicator = gameScene->AddGameObject("LocalPlayerIndicator", "UI");
+	indicator->AddComponent(new LocalPlayerIndicator(indicator, player));
+
+	// Initialize networking if online mode is enabled
+	if (isOnline) {
+		std::cout << (isServer ? "Starting SERVER" : "Starting CLIENT") << " on " << clientIP << ":" << clientPort << std::endl;
+		gameNetwork = new Network(isServer, clientIP, clientPort);
+		if (gameNetwork->Init()) {
+			std::cout << "Network initialized successfully!" << std::endl;
+			// Store scene reference for spawning remote player on demand
+			g_currentGameScene = gameScene.get();
+			// Add NetworkSync component for the local player
+			player->AddComponent(new NetworkSync(player, gameNetwork, true));
+		} else {
+			std::cout << "ERROR: Failed to initialize network!" << std::endl;
+		}
+	}
 
 	auto arm = gameScene->AddGameObject("PlayerArm", "Player");
 	auto armAnim = static_cast<Animator*>(arm->AddComponent(new Animator(player, renderer, { 0, 0, 0 }, false)));
@@ -353,4 +400,73 @@ void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCamera
 
 	auto camera = gameScene->AddGameObject("Camera", "Camera");
 	camera->AddComponent(new Camera(camera, player, setCameraPosFunc));
+}
+
+void SpawnRemotePlayer(Scene* gameScene)
+{
+	if(!gameScene || !isMultiplayer)
+	{
+		return;
+	}
+
+	// Check if remote player already exists
+	if(gameScene->GetGameObject("RemotePlayer") != nullptr)
+	{
+		std::cout << "Remote player already spawned, skipping..." << std::endl;
+		return;
+	}
+
+	std::cout << "Creating remote player game object..." << std::endl;
+	std::cout << "Remote player spawn position: (300, 315)" << std::endl;
+	
+	SDL_Renderer* renderer = gameScene->GetRenderer();
+	auto remotePlayer = gameScene->AddGameObject("RemotePlayer", "Player");
+	remotePlayer->GetTransform()->SetPosition({ 300, 315, 0 });
+
+	remotePlayer->AddComponent(new Rigidbody(remotePlayer, false, 1, 10));
+	remotePlayer->AddComponent(new BoxCollider(remotePlayer, { 45, 45 }));
+
+	auto remoteBodyAnim = static_cast<Animator*>(remotePlayer->AddComponent(new Animator(remotePlayer, renderer, { 0, 0, 0 }, false)));
+	auto remoteMovementComp = static_cast<Movement*>(remotePlayer->AddComponent(new Movement(remotePlayer, 60.0f, 0.005f, 5.0f)));
+	remoteMovementComp->SetLocal(false);  // Remote player - no input
+
+	remoteBodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdle, 1.0f);
+	remoteBodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActing, 1.0f);
+	remoteBodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunning, 0.05f);
+	remoteBodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActing, 0.05f);
+	remoteBodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumping, 1.0f);
+	remoteBodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActing, 1.0f);
+
+	remoteBodyAnim->AddAnimation(nullptr, GetIdleSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsIdleLeft, 2.0f, SDL_FLIP_HORIZONTAL);
+	remoteBodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsIdleActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+	remoteBodyAnim->AddAnimation(nullptr, GetRunningSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningLeft, 0.05f, SDL_FLIP_HORIZONTAL);
+	remoteBodyAnim->AddAnimation(nullptr, GetActionSpriteSheet(), { 100, 0, 100, 100 }, { 0, 0, 50, 50 }, 3, &IsRunningActingLeft, 0.05f, SDL_FLIP_HORIZONTAL);
+	remoteBodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 0, 0, 100, 100 }, { 0, 0, 50, 50 }, 2, &IsJumpingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+	remoteBodyAnim->AddAnimation(nullptr, GetJumpingSpriteSheet(), { 200, 0, 100, 100 }, { 0, 0, 50, 50 }, 1, &IsJumpingActingLeft, 1.0f, SDL_FLIP_HORIZONTAL);
+
+	auto remotePlayerComp = static_cast<Player*>(remotePlayer->AddComponent(new Player(remotePlayer, gameScene, remoteMovementComp, playerInvenComp)));
+	remotePlayerComp->SetLocal(false);  // Remote player - no input
+	remotePlayer->AddComponent(new Gravity(remotePlayer, .5f));
+	// Add NetworkSync component for the remote player (isLocal=false means receive data)
+	remotePlayer->AddComponent(new NetworkSync(remotePlayer, gameNetwork, false));
+
+	// Create remote player's arm
+	auto remoteArm = gameScene->AddGameObject("RemotePlayerArm", "Player");
+	auto remoteArmAnim = static_cast<Animator*>(remoteArm->AddComponent(new Animator(remotePlayer, renderer, { 0, 0, 0 }, false)));
+
+	remoteArmAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * IDLE_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsIdle, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * SHOOTING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerShooting, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunching, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsRunning, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsJumping, 1.0f);
+
+	remoteArmAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * IDLE_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsIdleLeft, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * SHOOTING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerShootingLeft, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * PUNCHING_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsPlayerPunchingLeft, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsRunningLeft, 1.0f);
+	remoteArmAnim->AddAnimation(nullptr, GetFlippedArmSpriteSheet(), { 112 * INVIS_ARM, 0, 112, 100 }, { 0, 0, 56, 50 }, 1, &IsJumpingLeft, 1.0f);
+
+	remoteArm->AddComponent(new PlayerArm(remoteArm, remotePlayer));
+	
+	std::cout << "Remote player fully initialized with all components and NetworkSync!" << std::endl;
 }

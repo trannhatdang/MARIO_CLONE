@@ -42,4 +42,7 @@ std::string GetBackgroundMusic();
 std::string GetHitSFX();
 std::string GetFont();
 
+extern std::string clientIP;
+extern int clientPort;
+
 #endif

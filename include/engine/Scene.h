@@ -17,10 +17,10 @@ class Scene
 		Scene(const std::string& name = "Scene", void (*changeSceneCallback)(int) = nullptr, SDL_Renderer* renderer = nullptr, SDL_Window* window = nullptr);
 		~Scene();
 		void OnStart();
-		void OnIterate();
-		void OnFixedIterate();
-		void OnDraw(SDL_Renderer* renderer);
-		void OnEvent(SDL_Event* event);
+	virtual void OnIterate();
+	void OnFixedIterate();
+	void OnDraw(SDL_Renderer* renderer);
+	virtual void OnEvent(SDL_Event* event);
 		void RegisterCollider(BoxCollider* coll);
 		void DeregisterCollider(BoxCollider* coll);
 		GameObject* AddGameObject(const std::string& name = "GameObject", const std::string& tag = "Tag");

@@ -9,6 +9,7 @@
 #include "SuperPunch.h"
 #include "Config.h"
 #include "PlayerInventory.h"
+#include "Player.h"
 
 class DestructibleBlock : public Component
 {

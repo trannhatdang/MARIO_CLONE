@@ -55,6 +55,9 @@
     <ClCompile Include="src\CustomScene\GameScene\SuperPunch.cpp" />
     <ClCompile Include="src\engine\Components\Collider.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Audio.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Network.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\NetworkSync.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\LocalPlayerIndicator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\build_config\SDL_build_config.h">
@@ -481,6 +484,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CustomScene\GameScene\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\Network.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\NetworkSync.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\LocalPlayerIndicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\CustomScene\GameScene\GameFrameCounter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

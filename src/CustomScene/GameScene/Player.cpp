@@ -28,7 +28,9 @@ void Player::shoot()
 	newBullet->GetTransform()->SetPosition(playerPos);
 	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetPlayerBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
 	newBullet->AddComponent(new PlayerBullet(newBullet, dir, 0.01f));
-	newBullet->AddComponent(new BoxCollider(newBullet, { 25, 25 }));
+	newBullet->AddComponent(new BoxCollider(newBullet, { 25, 25 }, true));  // true = isTrigger (no physical displacement)
+	
+	m_shootCounter++;  // Increment for network sync
 }
 
 void Player::punch()
@@ -64,7 +66,9 @@ void Player::OnIterate()
 
 void Player::OnEvent(SDL_Event* event)
 {
-	if(!m_scene)
+	// In online mode, only local player accepts input
+	// In local multiplayer, remote player can be controlled with alternate keys
+	if (!m_scene || (!m_isLocal && isOnline))
 	{
 		return;
 	}
@@ -72,19 +76,35 @@ void Player::OnEvent(SDL_Event* event)
 	if(event->type == SDL_EVENT_KEY_DOWN && event->key.down)
 	{
 		auto keyEvent = event->key;
-		if(keyEvent.key == SDLK_C && !IsActing())
-		{
-			shoot();
-
-			m_isShooting = true;
-			m_timeSinceLastAct = 0.0f;
-		}
-		else if(keyEvent.key == SDLK_X && !IsActing())
-		{
-			punch();
-
-			m_isPunching = true;
-			m_timeSinceLastAct = 0.0f;
+		
+		if (m_isLocal) {
+			// Local player uses C/X
+			if(keyEvent.key == SDLK_C && !IsActing())
+			{
+				shoot();
+				m_isShooting = true;
+				m_timeSinceLastAct = 0.0f;
+			}
+			else if(keyEvent.key == SDLK_X && !IsActing())
+			{
+				punch();
+				m_isPunching = true;
+				m_timeSinceLastAct = 0.0f;
+			}
+		} else {
+			// Remote player uses //. (only in local multiplayer, online mode is blocked above)
+			if(keyEvent.key == SDLK_SLASH && !IsActing())
+			{
+				shoot();
+				m_isShooting = true;
+				m_timeSinceLastAct = 0.0f;
+			}
+			else if(keyEvent.key == SDLK_PERIOD && !IsActing())
+			{
+				punch();
+				m_isPunching = true;
+				m_timeSinceLastAct = 0.0f;
+			}
 		}
 	}
 
@@ -144,4 +164,65 @@ bool Player::IsRunning() const
 bool Player::IsActing() const
 {
 	return m_isShooting || m_isPunching;
+}
+
+void Player::SetFacingLeft(bool value)
+{
+	m_movement->SetFacingLeft(value);
+}
+
+void Player::SetOnGround(bool value)
+{
+	m_movement->SetOnGround(value);
+}
+
+void Player::SetRunning(bool value)
+{
+	m_movement->SetRunning(value);
+}
+
+void Player::SetShooting(bool value)
+{
+	m_isShooting = value;
+}
+
+void Player::SetPunching(bool value)
+{
+	m_isPunching = value;
+}
+
+void Player::SetActing(bool value)
+{
+	// SetActing sets both shooting and punching
+	m_isShooting = value;
+	m_isPunching = value;
+}
+
+void Player::CreateBulletFromNetwork()
+{
+	if(!m_scene)
+	{
+		return;
+	}
+	Vector3 cameraPos = GetCameraPos();
+	Vector3 playerPos = gameObject->GetTransform()->GetPosition();
+	playerPos = playerPos + cameraPos;
+	playerPos.y += 25;
+	playerPos.x += m_movement->IsFacingLeft() ? -25 : 25;
+
+	Vector3 dir = m_movement->IsFacingLeft() ? Vector3(-1, 0, 0) : Vector3(1, 0, 0);
+
+	auto newBullet = m_scene->AddGameObject("Bullet", "PlayerBullet");
+	newBullet->GetTransform()->SetPosition(playerPos);
+	newBullet->AddComponent(new SpriteRenderer(newBullet, m_scene->GetRenderer(), GetPlayerBulletSprite(), { 0, 0, 0 }, { 0, 0, 100, 100 }, { 0, 0, 25, 25 }));
+	newBullet->AddComponent(new PlayerBullet(newBullet, dir, 0.01f));
+	newBullet->AddComponent(new BoxCollider(newBullet, { 25, 25 }, true));  // true = isTrigger (no physical displacement)
+}
+
+void Player::OnBlockDestroyed(int itemType, Vector3 pos)
+{
+	// Track block destruction for network sync
+	m_lastDestroyType = itemType;
+	m_lastDestroyPos = pos;
+	m_blockDestroyCounter++;
 }

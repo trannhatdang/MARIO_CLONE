@@ -44,12 +44,14 @@ void Movement::moveRight()
 
 void Movement::jump()
 {
-	if(!m_onGround)
+	// FIXED: Allow jumping within coyote time window after leaving ground
+	if(m_coyoteTime > m_coyoteThreshold)
 	{
 		return;
 	}
 
 	m_onGround = false;
+	m_coyoteTime = m_coyoteThreshold + 0.1f;  // Reset coyote time to prevent double jumping
 
 	// if(m_holdingLeft)
 	// {
@@ -68,6 +70,16 @@ void Movement::jump()
 void Movement::OnIterate()
 {
 	m_timeSinceLastMovement += DGTime_deltaTime();
+	
+	// FIXED: Track coyote time (time since leaving ground)
+	if(!m_onGround)
+	{
+		m_coyoteTime += DGTime_deltaTime();
+	}
+	else
+	{
+		m_coyoteTime = 0.0f;  // Reset coyote time when on ground
+	}
 }
 
 void Movement::OnEvent(SDL_Event* event)
@@ -80,36 +92,76 @@ void Movement::OnEvent(SDL_Event* event)
 	if(event->type == SDL_EVENT_KEY_DOWN && event->key.down)
 	{
 		auto keyEvent = event->key;
-		if(keyEvent.key == SDLK_LEFT)
+		
+		// Local player: WASD
+		if (m_isLocal && (keyEvent.key == SDLK_A || keyEvent.key == SDLK_D || keyEvent.key == SDLK_W))
 		{
-			moveLeft();
-			m_isFacingLeft = true;
-			m_isRunning = true;
-
-			m_holdingLeft = true;
+			if(keyEvent.key == SDLK_A)
+			{
+				moveLeft();
+				m_isFacingLeft = true;
+				m_isRunning = true;
+				m_holdingLeft = true;
+			}
+			else if(keyEvent.key == SDLK_D)
+			{
+				moveRight();
+				m_isFacingLeft = false;
+				m_isRunning = true;
+				m_holdingRight = true;
+			}
+			else if(keyEvent.key == SDLK_W)
+			{
+				jump();
+			}
 		}
-		else if(keyEvent.key == SDLK_RIGHT)
+		// Remote player: Arrow keys (only in local multiplayer, NOT online)
+		else if (!m_isLocal && !isOnline && (keyEvent.key == SDLK_LEFT || keyEvent.key == SDLK_RIGHT || keyEvent.key == SDLK_UP))
 		{
-			moveRight();
-			m_isFacingLeft = false;
-			m_isRunning = true;
-
-			m_holdingRight = true;
+			if(keyEvent.key == SDLK_LEFT)
+			{
+				moveLeft();
+				m_isFacingLeft = true;
+				m_isRunning = true;
+				m_holdingLeft = true;
+			}
+			else if(keyEvent.key == SDLK_RIGHT)
+			{
+				moveRight();
+				m_isFacingLeft = false;
+				m_isRunning = true;
+				m_holdingRight = true;
+			}
+			else if(keyEvent.key == SDLK_UP)
+			{
+				jump();
+			}
 		}
 
 	}
 	else if(event->type == SDL_EVENT_KEY_UP && !event->key.down)
 	{
 		auto keyEvent = event->key;
-		if(keyEvent.key == SDLK_LEFT)
+		
+		// Local player: WASD
+		if (m_isLocal && (keyEvent.key == SDLK_A || keyEvent.key == SDLK_D))
 		{
-			m_isRunning = false;
-			m_holdingLeft = false;
+			if(keyEvent.key == SDLK_A || keyEvent.key == SDLK_D)
+			{
+				m_isRunning = false;
+				m_holdingLeft = false;
+				m_holdingRight = false;
+			}
 		}
-		else if(keyEvent.key == SDLK_RIGHT)
+		// Remote player: Arrow keys (only in local multiplayer, NOT online)
+		else if (!m_isLocal && !isOnline && (keyEvent.key == SDLK_LEFT || keyEvent.key == SDLK_RIGHT))
 		{
-			m_isRunning = false;
-			m_holdingRight = false;
+			if(keyEvent.key == SDLK_LEFT || keyEvent.key == SDLK_RIGHT)
+			{
+				m_isRunning = false;
+				m_holdingLeft = false;
+				m_holdingRight = false;
+			}
 		}
 
 		if(keyEvent.key == SDLK_SPACE)
@@ -129,6 +181,7 @@ void Movement::OnCollisionEnter(GameObject* obj)
 	if(obj->GetTag() == "Collider")
 	{
 		m_onGround = true;
+		m_coyoteTime = 0.0f;  // Reset coyote time when landing
 	}
 }
 
@@ -145,4 +198,19 @@ bool Movement::IsFacingLeft() const
 bool Movement::IsRunning() const
 {
 	return m_isRunning;
+}
+
+void Movement::SetOnGround(bool value)
+{
+	m_onGround = value;
+}
+
+void Movement::SetFacingLeft(bool value)
+{
+	m_isFacingLeft = value;
+}
+
+void Movement::SetRunning(bool value)
+{
+	m_isRunning = value;
 }

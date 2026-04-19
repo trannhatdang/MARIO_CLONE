@@ -32,7 +32,7 @@ BoxCollider::BoxCollider(GameObject* gameObject, const BColliderOff& offset, boo
 
 Vector3 BoxCollider::findDisplacementVec(const Vector3& pos, const Vector3& dir) const
 {
-	const int MAX_ITERATE = 1000000;
+	const int MAX_ITERATE = 500;  // OPTIMIZED: Balance between performance and accuracy
 
 	Vector3 ans = {0, 0, 0};
 
@@ -40,7 +40,8 @@ Vector3 BoxCollider::findDisplacementVec(const Vector3& pos, const Vector3& dir)
 	{
 		ans += dir;
 
-		if(!CheckCollision(ans + pos))
+		Vector3 check_pos(ans.x + pos.x, ans.y + pos.y, ans.z + pos.z);
+		if(!CheckCollision(check_pos))
 		{
 			break;
 		}
@@ -51,34 +52,37 @@ Vector3 BoxCollider::findDisplacementVec(const Vector3& pos, const Vector3& dir)
 
 Vector3 BoxCollider::findDirectionToPushAway(const Vector3& pos) const
 {
-	Vector3 l_vec = findDisplacementVec(pos, {-1, 0, 0});
-	Vector3 tl_vec = findDisplacementVec(pos, {-1, -1, 0});
-	Vector3 t_vec = findDisplacementVec(pos, {0, -1, 0});
-	Vector3 tr_vec = findDisplacementVec(pos, {1, -1, 0});
-	Vector3 r_vec = findDisplacementVec(pos, {1, 0, 0});
-	Vector3 rb_vec = findDisplacementVec(pos, {1, 1, 0});
-	Vector3 b_vec = findDisplacementVec(pos, {0, 1, 0});
-	Vector3 bl_vec = findDisplacementVec(pos, {-1, 1, 0});
-
-	std::vector<Vector3> vecs = {
-		l_vec, tl_vec, t_vec, tr_vec,
-		r_vec, rb_vec, b_vec, bl_vec
+	// OPTIMIZED: Simple push directions instead of 8-direction search (was 8+ million collision checks)
+	// Try pushing away in cardinal directions: up, down, left, right
+	Vector3 directions[4] = {
+		Vector3(0, -1, 0),  // up
+		Vector3(0, 1, 0),   // down
+		Vector3(-1, 0, 0),  // left
+		Vector3(1, 0, 0)    // right
 	};
-
-	int min_index = 0;
-	for(int i = 0; i < 8; ++i)
+	
+	for(int d = 0; d < 4; ++d)
 	{
-		if(vecs[min_index].sqrMagnitude() > vecs[i].sqrMagnitude())
+		const Vector3& dir = directions[d];
+		// Try up to 50 pixels in this direction
+		for(int i = 1; i <= 50; ++i)
 		{
-			min_index = i;
+			// Manually construct to avoid const reference operator+ issue
+			Vector3 test_pos(pos.x + dir.x * i, pos.y + dir.y * i, pos.z);
+			if(!CheckCollision(test_pos))
+			{
+				return Vector3(dir.x * i, dir.y * i, 0);
+			}
 		}
 	}
-
-	return vecs[min_index];
+	return Vector3(0, 0, 0);
 }
 
 void BoxCollider::checkCollisionOfCurr()
 {
+	// OPTIMIZED: Skip disabled objects early
+	if(!gameObject->GetEnabled()) return;
+	
 	auto colls = gameObject->GetScene()->GetColliders();
 	int size = colls.size();
 	for(int i = 0; i < size; ++i)
@@ -86,6 +90,9 @@ void BoxCollider::checkCollisionOfCurr()
 		auto other_col = colls[i];
 		GameObject* other_obj = other_col->gameObject;
 		if(other_col == this || m_objectsCollided.find(other_obj) != m_objectsCollided.end()) continue;
+		
+		// OPTIMIZED: Skip disabled other objects
+		if(!other_obj->GetEnabled()) continue;
 
 		Vector3 pos = GetPosition();
 		BColliderOff off = m_offset;
@@ -159,7 +166,7 @@ void BoxCollider::DoCollision(GameObject* other_obj)
 	if(!other_rb || other_rb->GetMass() >= rb->GetMass())
 	{
 		auto dir_info = findDirectionToPushAway(pos);
-		rb->MovePosition(pos + dir_info);
+		rb->MovePosition(Vector3(pos.x + dir_info.x, pos.y + dir_info.y, pos.z + dir_info.z));
 	}
 
 	if(!other_rb)
@@ -281,7 +288,7 @@ Vector3 BoxCollider::CheckPath(const Vector3& pos, const Vector3f& dir)
 {
 	Vector3 old_pos = pos;
 	Vector3 new_pos = pos;
-	Vector3 lim = old_pos + Vector3(std::round(dir.x), std::round(dir.y), std::round(dir.z));
+	Vector3 lim(old_pos.x + (int)std::round(dir.x), old_pos.y + (int)std::round(dir.y), old_pos.z + (int)std::round(dir.z));
 
 	Vector3f new_dir = Vector3f_Zero();
 	Vector3 new_dir_int = {0, 0, 0};
@@ -291,7 +298,7 @@ Vector3 BoxCollider::CheckPath(const Vector3& pos, const Vector3f& dir)
 	bool collided = false;
 	int i = 1;
 
-	const int MAX_ITERATE = 100000000;
+	const int MAX_ITERATE = 5000;  // OPTIMIZED: Balance between performance and accuracy
 
 	for(i = 1; i < MAX_ITERATE; ++i)
 	{
@@ -299,7 +306,7 @@ Vector3 BoxCollider::CheckPath(const Vector3& pos, const Vector3f& dir)
 		new_dir_int = Vector3(std::round(new_dir.x), std::round(new_dir.y), std::round(new_dir.z));
 
 		old_pos = new_pos;
-		new_pos = new_dir_int + pos;
+		new_pos = Vector3(new_dir_int.x + pos.x, new_dir_int.y + pos.y, new_dir_int.z + pos.z);
 
 		if(new_dir_int.magnitude() > dir.magnitude())
 		{

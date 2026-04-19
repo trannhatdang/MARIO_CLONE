@@ -147,7 +147,10 @@
     <ClCompile Include="src\CustomScene\GameScene\DestructibleBlock.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\GameScene.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Gravity.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\LocalPlayerIndicator.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Movement.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\Network.cpp" />
+    <ClCompile Include="src\CustomScene\GameScene\NetworkSync.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\Player.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\PlayerArm.cpp" />
     <ClCompile Include="src\CustomScene\GameScene\PlayerBullet.cpp" />
@@ -206,9 +209,13 @@
     <ClInclude Include="include\CustomScene\GameScene\Boss.h" />
     <ClInclude Include="include\CustomScene\GameScene\Camera.h" />
     <ClInclude Include="include\CustomScene\GameScene\DestructibleBlock.h" />
+    <ClInclude Include="include\CustomScene\GameScene\GameFrameCounter.h" />
     <ClInclude Include="include\CustomScene\GameScene\GameScene.h" />
     <ClInclude Include="include\CustomScene\GameScene\Gravity.h" />
+    <ClInclude Include="include\CustomScene\GameScene\LocalPlayerIndicator.h" />
     <ClInclude Include="include\CustomScene\GameScene\Movement.h" />
+    <ClInclude Include="include\CustomScene\GameScene\Network.h" />
+    <ClInclude Include="include\CustomScene\GameScene\NetworkSync.h" />
     <ClInclude Include="include\CustomScene\GameScene\Player.h" />
     <ClInclude Include="include\CustomScene\GameScene\PlayerArm.h" />
     <ClInclude Include="include\CustomScene\GameScene\PlayerBullet.h" />

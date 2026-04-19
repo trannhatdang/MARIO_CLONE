@@ -16,7 +16,7 @@ class Boss : public Component
 		Scene* m_scene;
 		PlayerInventory* m_inven;
 
-		int m_hp = 10000;
+		int m_hp = 20;
 
 		int m_left;
 		int m_right;
@@ -41,6 +41,9 @@ class Boss : public Component
 		void OnIterate();
 		std::unique_ptr<Component> copy();
 		void OnCollisionEnter(GameObject* obj);
+		void OnTriggerEnter(GameObject* obj);
+		int GetHP() const { return m_hp; }
+		bool IsDead() const { return m_hp <= 0; }
 };
 
 #endif

@@ -26,8 +26,18 @@
 #include "SuperPunch.h"
 #include "Boss.h"
 #include "Audio.h"
+#include "Network.h"
+#include "NetworkSync.h"
+#include "LocalPlayerIndicator.h"
+
+extern bool isMultiplayer;
+extern bool isOnline;
+extern bool isServer;
+extern std::string clientIP;
+extern int clientPort;
 
 void SetWorld(int val);
 void GenerateGameScene(const std::unique_ptr<Scene>& gameScene, void (*setCameraPosFunc)(Vector3));
+void SpawnRemotePlayer(Scene* gameScene);
 
 #endif

@@ -18,6 +18,7 @@ class PlayerBullet : public Component
 		~PlayerBullet();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);
+		void OnTriggerEnter(GameObject* other);
 		std::unique_ptr<Component> copy();
 };
 

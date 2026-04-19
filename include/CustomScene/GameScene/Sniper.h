@@ -18,8 +18,8 @@ class Sniper : public Component
 		PlayerInventory* m_playerInven;
 
 		int m_hp = 5;
-		float m_shootingTime = 1.0f;
-		float m_shootDelay = 0.5f;
+		float m_shootingTime = 0.25f;
+		float m_shootDelay = 1.0f;
 		float m_timeSinceStartedShooting = 0.0f;
 		float m_timeSinceLastShot = 0.0f;
 
@@ -31,9 +31,12 @@ class Sniper : public Component
 		~Sniper();
 		void OnIterate();
 		void OnCollisionEnter(GameObject* other);
+		void OnTriggerEnter(GameObject* other);
 		std::unique_ptr<Component> copy();
 
 		bool IsShooting() const;
+		int GetHP() const { return m_hp; }
+		bool IsDead() const { return m_hp <= 0; }
 };
 
 #endif

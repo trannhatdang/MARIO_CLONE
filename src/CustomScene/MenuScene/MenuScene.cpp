@@ -1,4 +1,5 @@
 #include "CustomScene/MenuScene/MenuScene.h"
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -7,6 +8,159 @@ GrowBig* startGamePanelGrow;
 Scene* currScene;
 std::vector<GameObject*> gamePanel;
 
+static GameObject* singleButtonPtr = nullptr;
+static GameObject* singleFontPtr = nullptr;
+static GameObject* localButtonPtr = nullptr;
+static GameObject* localFontPtr = nullptr;
+static GameObject* serverButtonPtr = nullptr;
+static GameObject* serverFontPtr = nullptr;
+static GameObject* clientButtonPtr = nullptr;
+static GameObject* clientFontPtr = nullptr;
+static GameObject* confirmFont = nullptr;
+static GameObject* cancelFont = nullptr;
+extern void SetWorld(int);
+MenuScene* MenuScene::instance = nullptr;
+
+MenuScene::MenuScene(const std::string& name, void (*changeSceneCallback)(int), SDL_Renderer* renderer, SDL_Window* window)
+    : Scene(name, changeSceneCallback, renderer, window) {
+    instance = this;
+    GenerateMenuScene(this, &SetWorld);
+}
+
+void MenuScene::OnEvent(SDL_Event* event) {
+    Scene::OnEvent(event);
+    if (inputMode) {
+        if (event->type == SDL_EVENT_TEXT_INPUT) {
+            if (inputIPActive) {
+                inputIP += event->text.text;
+            } else {
+                inputPortStr += event->text.text;
+            }
+        } else if (event->type == SDL_EVENT_KEY_DOWN) {
+            if (event->key.key == SDLK_BACKSPACE) {
+                if (inputIPActive && !inputIP.empty()) inputIP.pop_back();
+                else if (!inputIPActive && !inputPortStr.empty()) inputPortStr.pop_back();
+            } else if (event->key.key == SDLK_RETURN) {
+                if (inputIPActive) {
+                    inputIPActive = false;
+                } else {
+                    ConfirmInput();
+                }
+            } else if (event->key.key == SDLK_TAB) {
+                inputIPActive = !inputIPActive;
+            } else if (event->key.key == SDLK_ESCAPE) {
+                CancelInput();
+            }
+        }
+    }
+}
+
+void MenuScene::OnIterate() {
+    Scene::OnIterate();
+    if (inputMode) {
+        if (ipDisplayFont) {
+            auto fontComp = static_cast<Font*>(ipDisplayFont->GetComponent("Font"));
+            if (fontComp) fontComp->SetText(inputIP);
+        }
+        if (portDisplayFont) {
+            auto fontComp = static_cast<Font*>(portDisplayFont->GetComponent("Font"));
+            if (fontComp) fontComp->SetText(inputPortStr);
+        }
+    }
+}
+
+
+void MenuScene::StartClientInput() {
+    inputMode = true;
+    inputIPActive = true;
+    inputIP = "";
+    inputPortStr = "";
+
+    if (!inputUICreated) {
+        SDL_Renderer* renderer = GetRenderer();
+        SDL_FRect button_srcrect;
+        button_srcrect.x = 0;
+        button_srcrect.y = 0;
+        button_srcrect.w = 160;
+        button_srcrect.h = 90;
+        SDL_FRect button_dstrect;
+        button_dstrect.x = 0;
+        button_dstrect.y = 0;
+        button_dstrect.w = 130;  // Button width
+        button_dstrect.h = 50;   // Button height
+
+        ipLabelFont = AddGameObject("IPLabel", "Font");
+        ipLabelFont->GetTransform()->SetPosition({500, 150, 0});
+        ipLabelFont->AddComponent(new Font(ipLabelFont, renderer, GetFont(), "IP:"));
+
+        ipDisplayFont = AddGameObject("IPDisplay", "Font");
+        ipDisplayFont->GetTransform()->SetPosition({600, 150, 0});
+        ipDisplayFont->AddComponent(new Font(ipDisplayFont, renderer, GetFont(), ""));
+
+        portLabelFont = AddGameObject("PortLabel", "Font");
+        portLabelFont->GetTransform()->SetPosition({500, 200, 0});
+        portLabelFont->AddComponent(new Font(portLabelFont, renderer, GetFont(), "Port:"));
+
+        portDisplayFont = AddGameObject("PortDisplay", "Font");
+        portDisplayFont->GetTransform()->SetPosition({600, 200, 0});
+        portDisplayFont->AddComponent(new Font(portDisplayFont, renderer, GetFont(), ""));
+
+        confirmButton = AddGameObject("ConfirmButton", "Button");
+        confirmButton->GetTransform()->SetPosition({500, 270, 0});
+        confirmButton->AddComponent(new SpriteRenderer(confirmButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, button_srcrect, button_dstrect));
+        confirmButton->AddComponent(new Button(confirmButton, &MenuScene::ConfirmClientInputStatic));
+
+        confirmFont = AddGameObject("ConfirmFont", "Font");
+        confirmFont->GetTransform()->SetPosition({450, 260, 0});
+        confirmFont->AddComponent(new Font(confirmFont, renderer, GetFont(), "Confirm"));
+
+        cancelButton = AddGameObject("CancelButton", "Button");
+        cancelButton->GetTransform()->SetPosition({700, 270, 0});
+        cancelButton->AddComponent(new SpriteRenderer(cancelButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, button_srcrect, button_dstrect));
+        cancelButton->AddComponent(new Button(cancelButton, &MenuScene::CancelClientInputStatic));
+
+        cancelFont = AddGameObject("CancelFont", "Font");
+        cancelFont->GetTransform()->SetPosition({650, 260, 0});
+        cancelFont->AddComponent(new Font(cancelFont, renderer, GetFont(), "Cancel"));
+
+        inputUICreated = true;
+    }
+
+    if (ipLabelFont) ipLabelFont->SetActive(true);
+    if (ipDisplayFont) ipDisplayFont->SetActive(true);
+    if (portLabelFont) portLabelFont->SetActive(true);
+    if (portDisplayFont) portDisplayFont->SetActive(true);
+    if (confirmButton) confirmButton->SetActive(true);
+    if (cancelButton) cancelButton->SetActive(true);
+	if (confirmFont) confirmFont->SetActive(true);
+	if (cancelFont) cancelFont->SetActive(true);
+}
+
+void MenuScene::ConfirmInput() {
+    try {
+        clientPort = std::stoi(inputPortStr);
+        clientIP = inputIP;
+        SetOnlineClient();
+        CancelInput();
+    } catch (...) {
+        // invalid, do nothing
+    }
+}
+
+void MenuScene::CancelInput() {
+    inputMode = false;
+    inputIP = "";
+    inputPortStr = "";
+    if (ipLabelFont) ipLabelFont->SetActive(false);
+    if (ipDisplayFont) ipDisplayFont->SetActive(false);
+    if (portLabelFont) portLabelFont->SetActive(false);
+    if (portDisplayFont) portDisplayFont->SetActive(false);
+    if (confirmButton) confirmButton->SetActive(false);
+    if (cancelButton) cancelButton->SetActive(false);
+	if (confirmFont) confirmFont->SetActive(false);
+	if (cancelFont) cancelFont->SetActive(false);
+}
+
 int world1 = 1, world2 = 1;
 
 void ChangeToGameSceneSave1()
@@ -14,7 +168,6 @@ void ChangeToGameSceneSave1()
 	if(setCurrWorldFunc)
 	{
 		setCurrWorldFunc(world1);
-
 	}
 
 	currScene->ChangeScene(2);
@@ -25,7 +178,6 @@ void ChangeToGameSceneSave2()
 	if(setCurrWorldFunc)
 	{
 		setCurrWorldFunc(world1);
-
 	}
 
 	currScene->ChangeScene(2);
@@ -48,6 +200,18 @@ void CloseStartGamePanel()
 	startGamePanelGrow->TurnOff();
 }
 
+void OpenModePanel()
+{
+	if (singleButtonPtr) singleButtonPtr->SetActive(true);
+	if (singleFontPtr) singleFontPtr->SetActive(true);
+	if (localButtonPtr) localButtonPtr->SetActive(true);
+	if (localFontPtr) localFontPtr->SetActive(true);
+	if (serverButtonPtr) serverButtonPtr->SetActive(true);
+	if (serverFontPtr) serverFontPtr->SetActive(true);
+	if (clientButtonPtr) clientButtonPtr->SetActive(true);
+	if (clientFontPtr) clientFontPtr->SetActive(true);
+}
+
 void OpenStartGamePanel()
 {
 	if(!startGamePanelGrow) return;
@@ -68,8 +232,37 @@ void EnableStartGamePanelChildren()
 	}
 }
 
-void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWorldFunc)(int))
+void SetSinglePlayer() {
+	isMultiplayer = false;
+	isOnline = false;
+	OpenStartGamePanel();
+}
+
+void SetLocalMultiplayer() {
+	isMultiplayer = true;
+	isOnline = false;
+	OpenStartGamePanel();
+}
+
+void SetOnlineServer() {
+	std::cout << "SetOnlineServer called - Starting game as SERVER" << std::endl;
+	isMultiplayer = true;
+	isOnline = true;
+	isServer = true;
+	OpenStartGamePanel();
+}
+
+void SetOnlineClient() {
+	std::cout << "SetOnlineClient called - Starting game as CLIENT" << std::endl;
+	isMultiplayer = true;
+	isOnline = true;
+	isServer = false;
+	OpenStartGamePanel();
+}
+
+void GenerateMenuScene(Scene* menuScene, void (*setCurrWorldFunc)(int))
 {
+	std::cout << "GenerateMenuScene called" << std::endl;
 	/*std::vector<std::vector<int>> world1_map = GetMapFromCsv(GetWorld1Csv());
 	for(int i = 0; i < world1_map.size(); ++i)
 	{
@@ -82,7 +275,7 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	}*/
 
 	gamePanel.reserve(20);
-	currScene = menuScene.get();
+	currScene = menuScene;
 	//READ SAVEFILE DATA
 	std::ifstream f(GetSaveFile());
 	json save_data = json::parse(f);
@@ -143,7 +336,7 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	auto startButton = menuScene->AddGameObject("StartButton", "Button");
 	startButton->GetTransform()->SetPosition({ 360, 500, 0 });
 	startButton->AddComponent(new SpriteRenderer(startButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
-	startButton->AddComponent(new Button(startButton, &OpenStartGamePanel));
+	startButton->AddComponent(new Button(startButton, &OpenModePanel));
 
 	auto startFont = menuScene->AddGameObject("StartFont", "Font");
 	startFont->GetTransform()->SetPosition({ 300, 480, 0});
@@ -156,6 +349,55 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	auto optionFont = menuScene->AddGameObject("optionFont", "Font");
 	optionFont->GetTransform()->SetPosition({ 600, 480, 0});
 	optionFont->AddComponent(new Font(optionFont, renderer, GetFont(), "Options"));
+
+	// Mode buttons
+	auto singleButton = menuScene->AddGameObject("SingleButton", "Button");
+	singleButton->GetTransform()->SetPosition({200, 400, 0});
+	singleButton->AddComponent(new SpriteRenderer(singleButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+	singleButton->AddComponent(new Button(singleButton, &SetSinglePlayer));
+	auto singleFont = menuScene->AddGameObject("SingleFont", "Font");
+	singleFont->GetTransform()->SetPosition({140, 380, 0});
+	singleFont->AddComponent(new Font(singleFont, renderer, GetFont(), "Single"));
+	singleButton->SetActive(false);
+	singleFont->SetActive(false);
+	singleButtonPtr = singleButton;
+	singleFontPtr = singleFont;
+
+	auto localButton = menuScene->AddGameObject("LocalButton", "Button");
+	localButton->GetTransform()->SetPosition({400, 400, 0});
+	localButton->AddComponent(new SpriteRenderer(localButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+	localButton->AddComponent(new Button(localButton, &SetLocalMultiplayer));
+	auto localFont = menuScene->AddGameObject("LocalFont", "Font");
+	localFont->GetTransform()->SetPosition({340, 380, 0});
+	localFont->AddComponent(new Font(localFont, renderer, GetFont(), "Local"));
+	localButton->SetActive(false);
+	localFont->SetActive(false);
+	localButtonPtr = localButton;
+	localFontPtr = localFont;
+
+	auto serverButton = menuScene->AddGameObject("ServerButton", "Button");
+	serverButton->GetTransform()->SetPosition({600, 400, 0});
+	serverButton->AddComponent(new SpriteRenderer(serverButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+	serverButton->AddComponent(new Button(serverButton, &SetOnlineServer));
+	auto serverFont = menuScene->AddGameObject("ServerFont", "Font");
+	serverFont->GetTransform()->SetPosition({540, 380, 0});
+	serverFont->AddComponent(new Font(serverFont, renderer, GetFont(), "Server"));
+	serverButton->SetActive(false);
+	serverFont->SetActive(false);
+	serverButtonPtr = serverButton;
+	serverFontPtr = serverFont;
+
+	auto clientButton = menuScene->AddGameObject("ClientButton", "Button");
+	clientButton->GetTransform()->SetPosition({800, 400, 0});
+	clientButton->AddComponent(new SpriteRenderer(clientButton, renderer, GetPanelSprite(true), {0.5f, 0.5f, 0.5f}, startbutton_srcrect, startbutton_dstrect));
+	clientButton->AddComponent(new Button(clientButton, &MenuScene::StartClientInputStatic));
+	auto clientFont = menuScene->AddGameObject("ClientFont", "Font");
+	clientFont->GetTransform()->SetPosition({740, 380, 0});
+	clientFont->AddComponent(new Font(clientFont, renderer, GetFont(), "Client"));
+	clientButton->SetActive(false);
+	clientFont->SetActive(false);
+	clientButtonPtr = clientButton;
+	clientFontPtr = clientFont;
 
 	auto menuSelector = menuScene->AddGameObject("MenuSelector", "Selector");
 	menuSelector->AddComponent(new SpriteRenderer(menuSelector, renderer, GetSelectorSprite(), { 0, 0, 0 }, selector_srcrect, selector_dstrect));
@@ -288,4 +530,16 @@ void GenerateMenuScene(const std::unique_ptr<Scene>& menuScene, void (*setCurrWo
 	auto saveSelector = menuScene->AddGameObject("MenuSelector", "Selector");
 	saveSelector->AddComponent(new SpriteRenderer(saveSelector, renderer, GetSelectorSprite(), { 0, 0, 0 }, selector_srcrect, selector_dstrect));
 	saveSelector->AddComponent(new Selector(saveSelector, { saveSlot1Panel, saveSlot2Panel }));
+}
+
+void MenuScene::StartClientInputStatic() {
+    if (instance) instance->StartClientInput();
+}
+
+void MenuScene::ConfirmClientInputStatic() {
+    if (instance) instance->ConfirmInput();
+}
+
+void MenuScene::CancelClientInputStatic() {
+    if (instance) instance->CancelInput();
 }
